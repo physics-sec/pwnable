@@ -1,0 +1,1 @@
+ulimit -f 11 rompe la shell, 12 no cambia nada
