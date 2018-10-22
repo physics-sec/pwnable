@@ -1,0 +1,22 @@
+
+   
+0x135d0ced8371afc6
+
+
+
+   
+0x523701b5b8accd87 -> 5924205714828217735
+
+eax = 0xb8accd87
+edx = 0xffffffff
+
+
+
+0xa6114fc9afba7c6e -> 11966433412555373678
+
+eax = 0xafba7c6e
+edx = 0xffffffff
+
+0xffad72ae  0000 0000 0000 0000 0000 6e7c baaf  ..........n|..                                                                                        
+0xffad72bc  ffff ffff 0000 0000 7088 0408 0000  ........p.....                                                                                        
+0xa6114fc9 -> edx es lo que deberia valer

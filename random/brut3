@@ -1,0 +1,8 @@
+#!/bin/bash
+# 3735929104 = 0xdeadbeef ^ 0x7fff
+# ./brut3 | grep -v Wrong
+while true; do
+	rta=$(echo 3735929104 | /home/random/random)
+	echo $rta
+done
+
