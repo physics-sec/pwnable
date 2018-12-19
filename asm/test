@@ -1,0 +1,29 @@
+
+push 0x41 # filename
+mov r10, rsp # direc del nombre
+
+sub rsp, 0x100
+mov r9, rsp # direc del buffer
+
+# open
+mov rsi, 0 # O_RONLY
+mov rdi, r10
+mov rax, 2
+syscall
+mov rbx, rax # fd
+
+# read
+mov rdx, 0x100
+mov rsi, rsp
+mov rdi, rbx
+mov rax, 0
+syscall
+
+# write
+mov rdx, 0x100
+mov rsi, rsp
+mov rdi, 1
+mov rax, 1
+syscall
+
+

