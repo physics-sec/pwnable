@@ -1,0 +1,32 @@
+	
+	binario
+
+0x011161d4      55             push rbp                                                                                                   
+0x011161d5      4889e5         mov rbp, rsp                                                                                               
+0x011161d8      4883ec10       sub rsp, 0x10                                                                                              
+0x011161dc      8b059a352000   mov eax, dword [0x0131977c]       ; [0x131977c:4]=0                                                        
+0x011161e2      83e830         sub eax, 0x30               ; '0'                                                                          
+0x011161e5      4863d0         movsxd rdx, eax                                                                                            
+0x011161e8      488d45f0       lea rax, [rbp - 0x10]                                                                                      
+0x011161ec      bed09a3101     mov esi, 0x1319ad0                                                                                         
+0x011161f1      4889c7         mov rdi, rax                                                                                               
+0x011161f4      e8c7a52eff     call sym.imp.memcpy         ;[1]   ; void *memcpy(void *s1, const void *s2, size_t n)                      
+0x011161f9      90             nop                                                                                                                    0x011161fa      c9             leave                                                                                                      
+0x011161fb      c3             ret   
+
+
+	bin
+
+0x0120920f      55             push rbp                                                                                                   
+0x01209210      4889e5         mov rbp, rsp                                                                                               
+0x01209213      4883ec20       sub rsp, 0x20                                                                                              
+0x01209217      8b056f3d2000   mov eax, dword [0x0140cf8c]       ; [0x140cf8c:4]=0                                                        
+0x0120921d      83e830         sub eax, 0x30               ; '0'                                                                          
+0x01209220      4863d0         movsxd rdx, eax                                                                                            
+0x01209223      488d45e0       lea rax, [rbp - 0x20]                                                                                      
+0x01209227      bed0cf4001     mov esi, 0x140cfd0                                                                                         
+0x0120922c      4889c7         mov rdi, rax                                                                                               
+0x0120922f      e8bc761fff     call sym.imp.memcpy         ;[1]   ; void *memcpy(void *s1, const void *s2, size_t n)                      
+0x01209234      90             nop                                                                                                        
+0x01209235      c9             leave                                                                                                      
+0x01209236      c3             ret                                                                                                        
