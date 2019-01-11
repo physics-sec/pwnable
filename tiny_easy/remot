@@ -1,1 +1,0 @@
-gcc santicode.c -o santicode && ./brut33
