@@ -44,7 +44,7 @@ averiguar addr del heap y saltar a shellcode en echo1 input?
 
 saltar a:
             0x004007f8      b88a0b4000     mov eax, str.goodbye__s     ; 0x400b8a ; "goodbye %s\n"
-            0x004007fd      488b55f8       mov rdx, qword [rbp - 8]
+            0x004007fd      488b55f8       mov rdx, qword [rbp - 8]    ; puntero a los datos, osea 0x00602098
             0x00400801      4889d6         mov rsi, rdx
             0x00400804      4889c7         mov rdi, rax
             0x00400807      b800000000     mov eax, 0
@@ -55,20 +55,23 @@ saltar a:
 rbp tiene que ser un address enserio
 de esta manera se puede leakear una direccion de memoria
 
-BOF:
+**********************
+X = direccion de mem contigua a una direc que almacena 0x00602098 
     ...
-    rbp = addr a leakear + 8 -> 0x00602098 + 8
+    rbp = X
     ret = 0x004007f8
     [que pasa con el leave antes del ret??] -> mov rsp, rbp, pop rbp -> arruina el stack frame?
     ret = ?
 
 
-lo anteiror no mostraria por pantalla mi shellcode...
+**********************
 
 yo deberia dejar en el BOF la direccion de memoria que me interesa -> 0x00602098
 deberia hacer que rbp sea la direccion de memoria donde escribiaAAAAAAAAAAAA
 no se donde lo escribi porque es en el stack y no se donde esta...
 
+*********************
 
+??
 
 
