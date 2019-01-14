@@ -1,0 +1,31 @@
+seg fault en: cual es tu nombre?
+
+
+segfault at 0x800602078                                                                                                                               
+- offset -       0 1  2 3  4 5  6 7  8 9  A B  C D  E 0123456789ABCDE                                                                                 
+0x7ffc8f0b5f10  50c5 a178 1e7f 0000 0000 0000 0000 00 P..x...........                                                                                 
+0x7ffc8f0b5f1f  0041 4141 4141 4141 4141 4141 4141 41 .AAAAAAAAAAAAAA                                                                                 
+0x7ffc8f0b5f2e  4141 4141 4141 4141 4141 0000 0000 00 AAAAAAAAAA.....                                                                                 
+0x7ffc8f0b5f3d  0000 0090 0a40 0000 0000 009b 0084 78 .....@........x                                                                                 
+0x7ffc8f0b5f4c  1e7f 0000                             ....                                                                                            
+ rax 0xffffffff      rbx 0x00000000      rcx 0x7ffc8f0b59d0                                                                                           
+ rdx 0x00000041       r8 0xffffffff       r9 0x7f1e789de500                                                                                           
+ r10 0x00400c18      r11 0x00000246      r12 0x004006b0                                                                                               
+ r13 0x7ffc8f0b6020  r14 0x00000000      r15 0x00000000                                                                                               
+ rsi 0x00000000      rdi 0x00000000      rsp 0x7ffc8f0b5f10                                                                                           
+ rbp 0x7ffc8f0b5f40  rip 0x00400a5d      rflags C1PASIV                                                                                               
+orax 0xffffffffffffffff                                                                                                                               
+
+
+0x00400a55      8b45dc         mov eax, dword [local_24h]                                                                                 
+0x00400a58      83e801         sub eax, 1                                                                                                 
+0x00400a5b      89c0           mov eax, eax                                                                                               
+;-- rip:                                                                                                                                  
+0x00400a5d      488b14c58020.  mov rdx, qword [rax*8 + obj.func]    ; [0x602080:8]=0x400818 sym.echo1                                     
+
+
+
+
+[0x0040089a]> px @ rbp-0x24
+- offset -       0 1  2 3  4 5  6 7  8 9  A B  C D  0123456789ABCD
+0x7ffc8f0b5f1c  0000 0000 4141 4141 4141 4141 4141  ....AAAAAAAAAA

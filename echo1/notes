@@ -1,0 +1,19 @@
+0x0000000000400000 - 0x0000000000401000 * usr     4K s r-x /home/user/repositorios/pwnable/echo1/echo1 /home/user/repositorios/pwnable/echo1/echo1 ; map.home_user_repositorios_pwnable_echo1_echo1.r_x
+0x0000000000601000 - 0x0000000000602000 - usr     4K s r-x /home/user/repositorios/pwnable/echo1/echo1 /home/user/repositorios/pwnable/echo1/echo1 ; map.home_user_repositorios_pwnable_echo1_echo1.rwx
+0x0000000000602000 - 0x0000000000603000 - usr     4K s rwx /home/user/repositorios/pwnable/echo1/echo1 /home/user/repositorios/pwnable/echo1/echo1 ; reloc.free
+0x00007f07f234b000 - 0x00007f07f236d000 - usr   136K s r-x /lib/x86_64-linux-gnu/libc-2.28.so /lib/x86_64-linux-gnu/libc-2.28.so
+0x00007f07f236d000 - 0x00007f07f2501000 - usr   1.6M s r-x /lib/x86_64-linux-gnu/libc-2.28.so /lib/x86_64-linux-gnu/libc-2.28.so
+0x00007f07f2501000 - 0x00007f07f2502000 - usr     4K s --- /lib/x86_64-linux-gnu/libc-2.28.so /lib/x86_64-linux-gnu/libc-2.28.so
+0x00007f07f2502000 - 0x00007f07f2506000 - usr    16K s r-x /lib/x86_64-linux-gnu/libc-2.28.so /lib/x86_64-linux-gnu/libc-2.28.so
+0x00007f07f2506000 - 0x00007f07f2508000 - usr     8K s rwx /lib/x86_64-linux-gnu/libc-2.28.so /lib/x86_64-linux-gnu/libc-2.28.so
+0x00007f07f2508000 - 0x00007f07f250c000 - usr    16K s rwx unk0 unk0
+0x00007f07f250c000 - 0x00007f07f250e000 - usr     8K s rwx unk1 unk1
+0x00007f07f253c000 - 0x00007f07f253d000 - usr     4K s r-x /lib/x86_64-linux-gnu/ld-2.28.so /lib/x86_64-linux-gnu/ld-2.28.so
+0x00007f07f253d000 - 0x00007f07f2563000 - usr   152K s r-x /lib/x86_64-linux-gnu/ld-2.28.so /lib/x86_64-linux-gnu/ld-2.28.so ; map.lib_x86_64_linux_gnu_ld_2.28.so.r_x
+0x00007f07f2563000 - 0x00007f07f2564000 - usr     4K s r-x /lib/x86_64-linux-gnu/ld-2.28.so /lib/x86_64-linux-gnu/ld-2.28.so ; map.lib_x86_64_linux_gnu_ld_2.28.so.rwx
+0x00007f07f2564000 - 0x00007f07f2565000 - usr     4K s rwx /lib/x86_64-linux-gnu/ld-2.28.so /lib/x86_64-linux-gnu/ld-2.28.so
+0x00007f07f2565000 - 0x00007f07f2566000 - usr     4K s rwx unk2 unk2 ; map.unk0.rwx
+0x00007ffea300d000 - 0x00007ffea302e000 - usr   132K s rwx [stack] [stack] ; map.stack_.rwx
+0x00007ffea316c000 - 0x00007ffea316f000 - usr    12K s r-- [vvar] [vvar] ; map.vvar_.r
+0x00007ffea316f000 - 0x00007ffea3171000 - usr     8K s r-x [vdso] [vdso] ; map.vdso_.r_x
+
