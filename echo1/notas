@@ -3,6 +3,10 @@
 
 bof -> 'A'*16 + rbp + ret addr
 
+el binario se carga en una direccion fija
+
+yo se donde esta un punto a mi nombre, quiza puedo hacer algo con eso?? rop rop rop print ret
+
 
 
 0x00000000004006ec : call rax
