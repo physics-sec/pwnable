@@ -20,3 +20,55 @@ yo se donde esta un punto a mi nombre, quiza puedo hacer algo con eso?? rop rop 
 
 rbx -> 0x20
 
+
+0x012e4260  4142 4344 4546 4748 4949 4900 0000 0000  ABCDEFGHIII.....
+0x012e4270  40e7 2b65 fc7f 0000 c007 4000 0000 0000  @.+e......@.....
+0x012e4280  ec07 4000 0000 0000 1104 0000 0000 0000  ..@.............
+0x012e4290  4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA
+0x012e42a0  4141 4141 4141 4141 4141 4141 4141 0a00  AAAAAAAAAAAAAA..
+
+nombre -> ABCDEF...
+echo1  -> AAAAAA...
+
+0x00602098 -> puntero al heap -> nombre
+
+addr del nombre + 48 -> echo1
+
+heap ejecutable!
+averiguar addr del heap y saltar a shellcode en echo1 input?
+
+
+
+0x0000000000400762 : pop rbp ; ret
+0x004007f8 -> goodbye?
+
+saltar a:
+            0x004007f8      b88a0b4000     mov eax, str.goodbye__s     ; 0x400b8a ; "goodbye %s\n"
+            0x004007fd      488b55f8       mov rdx, qword [rbp - 8]
+            0x00400801      4889d6         mov rsi, rdx
+            0x00400804      4889c7         mov rdi, rax
+            0x00400807      b800000000     mov eax, 0
+            0x0040080c      e82ffeffff     call sym.imp.printf         ;[1]
+            0x00400811      b800000000     mov eax, 0
+            0x00400816      c9             leave
+
+rbp tiene que ser un address enserio
+de esta manera se puede leakear una direccion de memoria
+
+BOF:
+    ...
+    rbp = addr a leakear + 8 -> 0x00602098 + 8
+    ret = 0x004007f8
+    [que pasa con el leave antes del ret??] -> mov rsp, rbp, pop rbp -> arruina el stack frame?
+    ret = ?
+
+
+lo anteiror no mostraria por pantalla mi shellcode...
+
+yo deberia dejar en el BOF la direccion de memoria que me interesa -> 0x00602098
+deberia hacer que rbp sea la direccion de memoria donde escribiaAAAAAAAAAAAA
+no se donde lo escribi porque es en el stack y no se donde esta...
+
+
+
+
