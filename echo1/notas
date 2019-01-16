@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-bof -> 'A'*16 + rbp + ret addr
+bof ->  'A'*32 + rbp + ret addr
 
 el binario se carga en una direccion fija
 
@@ -60,7 +60,7 @@ X = direccion de mem contigua a una direc que almacena 0x00602098
     ...
     rbp = X
     ret = 0x004007f8
-    [que pasa con el leave antes del ret??] -> mov rsp, rbp, pop rbp -> arruina el stack frame?
+    [que pasa con el leave antes de el ret??] -> mov rsp, rbp, pop rbp -> arruina el stack frame?
     ret = ?
 
 
@@ -72,6 +72,27 @@ no se donde lo escribi porque es en el stack y no se donde esta...
 
 *********************
 
-??
 
 
+|   sym.cleanup ();                                                                                                                                   
+|           ; CALL XREF from sym.main (0x400a20)                                                                                                      
+|           0x0040089c      55             push rbp                                                                                             
+|           0x0040089d      4889e5         mov rbp, rsp                                                                                         
+|           0x004008a0      488b05f11720.  mov rax, qword obj.o        ; [0x602098:8]=0x941260 ; "`\x12\x94"                                   
+|           0x004008a7      4889c7         mov rdi, rax                                                                                         
+|           0x004008aa      e871fdffff     call sym.imp.free           ;[1] ; void free(void *ptr)                                              
+|           0x004008af      5d             pop rbp                                                                                           
+\           0x004008b0      c3             ret 
+
+
+
+|           0x00400890      e89bfdffff     call sym.imp.puts           ;[1] ; int puts(const char *s)
+|           0x00400895      b800000000     mov eax, 0
+|           0x0040089a      5d             pop rbp
+\           0x0040089b      c3             ret
+
+
+si llamo a cleanup, rdi es obj.o,
+dsp llamo a puts y leakeo el address de el heap
+
+y no hay leaves !!
