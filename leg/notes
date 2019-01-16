@@ -1,0 +1,44 @@
+
+32 bits!
+max num: 4.294.967.295
+
+key1:
+ 0x00008cdc <+8>: mov r3, pc
+ 0x00008ce0 <+12>:    mov r0, r3
+
+min: 72284
+110000
+
+
+key1 : 0x00008cdc
+key1 : 0x00008ce0
+
+key3 : 0x00008d80
+
+In all ARM processors, the following registers are available and accessible in any processor mode:
+
+    13 general-purpose registers R0-R12.
+    One Stack Pointer (SP).
+    One Link Register (LR).
+    One Program Counter (PC).
+    One Application Program Status Register (APSR).
+
+
+    bx:
+The BX instruction branches to the address contained in a specified register. The value of bit 0 of the branch address determines whether execution continues in ARM state or Thumb state.
+
+
+    adds:
+suma (dah)
+
+
+i=72284
+while [ 1 ]
+do
+echo $i | ./leg | grep Congratz
+echo $i
+done
+
+-> 108400
+key2 -> ????
+

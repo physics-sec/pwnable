@@ -41,9 +41,9 @@ Dump of assembler code for function main:
 End of assembler dump.
 (gdb) disass key1
 Dump of assembler code for function key1:
-   0x00008cd4 <+0>:	push	{r11}		; (str r11, [sp, #-4]!)
-   0x00008cd8 <+4>:	add	r11, sp, #0
-   0x00008cdc <+8>:	mov	r3, pc
+   0x00008cd4 <+00>:	push	{r11}		; (str r11, [sp, #-4]!)
+   0x00008cd8 <+04>:	add	r11, sp, #0
+   0x00008cdc <+08>:	mov	r3, pc
    0x00008ce0 <+12>:	mov	r0, r3
    0x00008ce4 <+16>:	sub	sp, r11, #0
    0x00008ce8 <+20>:	pop	{r11}		; (ldr r11, [sp], #4)
@@ -51,9 +51,9 @@ Dump of assembler code for function key1:
 End of assembler dump.
 (gdb) disass key2
 Dump of assembler code for function key2:
-   0x00008cf0 <+0>:	push	{r11}		; (str r11, [sp, #-4]!)
-   0x00008cf4 <+4>:	add	r11, sp, #0
-   0x00008cf8 <+8>:	push	{r6}		; (str r6, [sp, #-4]!)
+   0x00008cf0 <+00>:	push	{r11}		; (str r11, [sp, #-4]!)
+   0x00008cf4 <+04>:	add	r11, sp, #0
+   0x00008cf8 <+08>:	push	{r6}		; (str r6, [sp, #-4]!)
    0x00008cfc <+12>:	add	r6, pc, #1
    0x00008d00 <+16>:	bx	r6
    0x00008d04 <+20>:	mov	r3, pc
@@ -68,9 +68,9 @@ Dump of assembler code for function key2:
 End of assembler dump.
 (gdb) disass key3
 Dump of assembler code for function key3:
-   0x00008d20 <+0>:	push	{r11}		; (str r11, [sp, #-4]!)
-   0x00008d24 <+4>:	add	r11, sp, #0
-   0x00008d28 <+8>:	mov	r3, lr
+   0x00008d20 <+00>:	push	{r11}		; (str r11, [sp, #-4]!)
+   0x00008d24 <+04>:	add	r11, sp, #0
+   0x00008d28 <+08>:	mov	r3, lr
    0x00008d2c <+12>:	mov	r0, r3
    0x00008d30 <+16>:	sub	sp, r11, #0
    0x00008d34 <+20>:	pop	{r11}		; (ldr r11, [sp], #4)
