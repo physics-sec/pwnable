@@ -1,0 +1,48 @@
+/ (fcn) sym.fast_memcpy 126
+|   sym.fast_memcpy (int arg_8h, int arg_ch, int arg_10h);
+|           ; var int local_4h @ ebp-0x4
+|           ; arg int arg_8h @ ebp+0x8
+|           ; arg int arg_ch @ ebp+0xc
+|           ; arg int arg_10h @ ebp+0x10
+|           ; CALL XREF from main (0x565a8641)
+|           0x565a827a      55             push ebp
+|           0x565a827b      89e5           mov ebp, esp
+|           0x565a827d      83ec10         sub esp, 0x10
+|           0x565a8280      e83d040000     call sym.__x86.get_pc_thunk.ax
+|           0x565a8285      057b2d0000     add eax, 0x2d7b             ; '{-'
+|           0x565a828a      837d103f       cmp dword [arg_10h], 0x3f   ; '?' ; [0x10:4]=-1 ; 63
+|       ,=< 0x565a828e      764c           jbe 0x565a82dc
+|       |   0x565a8290      8b4510         mov eax, dword [arg_10h]    ; [0x10:4]=-1 ; 16
+|       |   0x565a8293      c1e806         shr eax, 6
+|       |   0x565a8296      8945fc         mov dword [local_4h], eax
+|       |   0x565a8299      8365103f       and dword [arg_10h], 0x3f
+|      ,==< 0x565a829d      eb30           jmp 0x565a82cf
+|     .---> 0x565a829f      8b450c         mov eax, dword [arg_ch]     ; [0xc:4]=-1 ; 12
+|     :||   0x565a82a2      8b5508         mov edx, dword [arg_8h]     ; [0x8:4]=-1 ; 8
+|     :||   0x565a82a5      660f6f00       movdqa xmm0, xmmword [eax]
+|     :||   0x565a82a9      660f6f4810     movdqa xmm1, xmmword [eax + 0x10]
+|     :||   0x565a82ae      660f6f5020     movdqa xmm2, xmmword [eax + 0x20]
+|     :||   0x565a82b3      660f6f5830     movdqa xmm3, xmmword [eax + 0x30]
+|     :||   0x565a82b8      0f2b02         movntps xmmword [edx], xmm0
+|     :||   0x565a82bb      0f2b4a10       movntps xmmword [edx + 0x10], xmm1
+|     :||   0x565a82bf      0f2b5220       movntps xmmword [edx + 0x20], xmm2
+|     :||   0x565a82c3      0f2b5a30       movntps xmmword [edx + 0x30], xmm3
+|     :||   0x565a82c7      83450840       add dword [arg_8h], 0x40    ; '@'
+|     :||   0x565a82cb      83450c40       add dword [arg_ch], 0x40    ; '@'
+|     :||   ; CODE XREF from sym.fast_memcpy (0x565a829d)
+|     :`--> 0x565a82cf      8b45fc         mov eax, dword [local_4h]
+|     : |   0x565a82d2      8d50ff         lea edx, [eax - 1]
+|     : |   0x565a82d5      8955fc         mov dword [local_4h], edx
+|     : |   0x565a82d8      85c0           test eax, eax
+|     `===< 0x565a82da      75c3           jne 0x565a829f
+|       `-> 0x565a82dc      837d1000       cmp dword [arg_10h], 0      ; [0x10:4]=-1 ; 0
+|       ,=< 0x565a82e0      7411           je 0x565a82f3
+|       |   0x565a82e2      ff7510         push dword [arg_10h]
+|       |   0x565a82e5      ff750c         push dword [arg_ch]
+|       |   0x565a82e8      ff7508         push dword [arg_8h]
+|       |   0x565a82eb      e84bffffff     call sym.slow_memcpy
+|       |   0x565a82f0      83c40c         add esp, 0xc
+|       `-> 0x565a82f3      8b4508         mov eax, dword [arg_8h]     ; [0x8:4]=-1 ; 8
+|           0x565a82f6      c9             leave
+\           0x565a82f7      c3             ret
+
