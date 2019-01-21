@@ -14,5 +14,20 @@ push "/bin/sh"
 tengo 22 bytes para modificar
 cada uno puede valer de 0x00 a 0xff
 
-
 como decremento el stack?
+
+fuzz :
+
+while [ $b -le 22 ]
+while> do
+while> i=0
+while> while [ $i -le 256 ]
+while while> do
+while while> (print "$b\n$i\n";cat) | ./fix
+while while> print "$b\n$i\n"
+while while> i=$((i+1))
+while while> done
+while> b=$((b+1))
+while> done
+
+ahi encontre el 15-201 que llama a leave y decrementa el stack!
