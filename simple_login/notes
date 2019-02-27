@@ -1,0 +1,33 @@
+
+largo: 30 o 12
+
+main
+    mi input va a local_1eh
+
+algo de base64 decode?
+
+sym.auth
+    algo de md5 y el string f87cd601aa7fedca99018a8be88eda34
+
+sym.correct
+    el resultado final debe ser 0xdeadbeef
+
+entre 12 y 17 el binario rompe, chan!
+
+win() -> 0x08049278
+
+----
+con un input de 17 caracteres, sobre escribo todo el saved ebp
+
+el tema es, no controlo con 'que' lo piso
+con que deberia sobre escribirlo??
+
+asumamos que contrlo ebp,
+al ejecutar leave; ret quiero que eip sea win()
+como puedo lograr eso?
+leave -> mov esp, ebp; push ebp 
+ret   -> mov eip, esp 
+
+ebp -> A
+A   - XXXXX
+A+4 - win() addr
