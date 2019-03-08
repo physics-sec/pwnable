@@ -2,18 +2,12 @@ from pwn import *
 import re
 
 #context.log_level = 'error'
-host = '0'
 host = 'pwnable.kr'
-conn = remote(host, 9019)
+host = '0'
 
-"""
-- Select Menu -
-1. create note
-2. write note
-3. read note
-4. delete note
-5. exit
-"""
+s = ssh(host='pwnable.kr', user='note', password='guest', port=2222)
+conn = s.remote(host, 9019)
+
 def create_note():
 	conn.sendline('1')
 	line = conn.readuntil('- Select Menu -')
@@ -52,7 +46,7 @@ def delete_note(nro):
 	conn.readuntil('note no?\n')
 	conn.sendline(str(nro))
 	line = conn.recvline()
-	if 'already empty slut!' in line 'index out of range' in line:
+	if 'already empty slut!' in line or 'index out of range' in line:
 		print 'Error: ' + line
 		return
 
