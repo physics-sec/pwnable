@@ -1,0 +1,56 @@
+POST / HTTP/1.1
+Host: localhost:9100
+Accept-Encoding: gzip
+User-Agent: xmlrpclib.py/1.0.1 (by www.pythonware.com)
+Content-Type: text/xml
+Content-Length: 284
+
+<?xml version='1.0'?>
+<methodCall>
+<methodName>authenticate</methodName>
+<params>
+<param>
+<value><string>f93267f7d8e60334f2108629ee09dda7d4484eb4d467a1e303fc434c6f3bebdba4bdf1599d31a5317ffbfca80d3bafdc3cd88fc4499f713a5edf76e77abc4930</string></value>
+</param>
+</params>
+</methodCall>
+
+
+
+
+
+
+<?xml version='1.0'?>
+<methodResponse>
+	<params>
+		<param>
+			<value><int>0</int></value>
+		</param>
+	</params>
+</methodResponse>
+
+
+
+
+
+
+<?xml version='1.0'?>
+<methodResponse>
+	<fault>
+		<value><struct>
+			<member>
+				<name>faultCode</name>
+				<value><int>1</int></value>
+			</member>
+			<member>
+				<name>faultString</name>
+				<value><string>&lt;type 'exceptions.IndexError'&gt;:list index out of range</string></value>
+			</member>
+		</struct></value>
+	</fault>
+</methodResponse>
+
+
+
+
+
