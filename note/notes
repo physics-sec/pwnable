@@ -1,0 +1,54 @@
+the "note" binary will be executed under note_pwn privilege if you connect to port 9019.
+execute the binary by connecting to daemon(nc 0 9019) then pwn it, then get flag.
+* ASLR is disabled for this challenge
+
+
+1 byte overflow en case secreto
+
+overflow en todas las notas
+
+podes leer y escribir la nota 256, la cual no se inicializa
+
+mem_arr[257] -> no 256
+
+plan
+1) crear notas de la 0 a la 255
+2) intentar leer o escribir la 256 
+
+
+
+https://stackoverflow.com/questions/28575893/when-would-one-use-mmap-map-fixed
+Further, note that use of MAP_FIXED with a hard-coded address or a random address is always a bug. The only correct way to use MAP_FIXED is to replace an existing mapping whose address was assigned by a previous successful call to mmap without MAP_FIXED, or in some other way where you feel it's safe to replace whole pages. This aspect too is completely analogous to dup2; it's always a bug to use dup2 when the caller doesn't already have an open file on the target fd with the intent to replace it.
+
+
+
+       MAP_FIXED
+              Don't  interpret  addr  as  a hint: place the mapping at exactly
+              that address.  addr must be suitably aligned: for most architec‐
+              tures  a  multiple of the page size is sufficient; however, some
+              architectures may impose additional restrictions.  If the memory
+              region  specified by addr and len overlaps pages of any existing
+              mapping(s), then the overlapped part of the existing  mapping(s)
+              will  be  discarded.   If  the specified address cannot be used,
+              mmap() will fail.
+
+              Software that aspires to be portable should  use  the  MAP_FIXED
+              flag  with  care,  keeping  in  mind  that the exact layout of a
+              process's memory mappings is allowed to change significantly be‐
+              tween  kernel versions, C library versions, and operating system
+              releases.  Carefully read the discussion of this flag in NOTES!
+RETURN VALUE
+       On success, mmap() returns a pointer to the mapped area.  On error, the
+       value  MAP_FAILED  (that is, (void *) -1) is returned, and errno is set
+       to indicate the cause of the error.
+
+       On success, munmap() returns 0.  On failure, it returns -1,  and  errno
+       is set to indicate the cause of the error (probably to EINVAL).
+
+
+
+Las notas tienen los permisos: PROT_READ|PROT_WRITE|PROT_EXEC
+si redirijo la ejecucion de código a una página -> win()
+
+yo se la direccion de memoria de todas las notas,
+y puedo sobreescribir un byte del Case hacker
