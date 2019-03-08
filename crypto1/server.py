@@ -13,7 +13,7 @@ DecodeAES = lambda c, e: c.decrypt(e.decode('hex'))
 # server's secrets
 key = 'A' * 16
 iv  = 'B' * 16
-cookie = 'c' * 50
+cookie = 'c' * 49
 
 def AES128_CBC(msg):
 	cipher = AES.new(key, AES.MODE_CBC, iv)

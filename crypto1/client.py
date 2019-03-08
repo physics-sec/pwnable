@@ -14,7 +14,7 @@ DecodeAES = lambda c, e: c.decrypt(e.decode('hex'))
 # server's secrets
 key = 'A' * 16
 iv  = 'B' * 16
-cookie = 'c' * 50
+cookie = 'c' * 49
 
 # guest / 8b465d23cb778d3636bf6c4c5e30d031675fd95cec7afea497d36146783fd3a1
 def sanitize(arg):
