@@ -48,7 +48,7 @@ if __name__ == '__main__':
 		print 'thanks! let me try if your payload works...'
 		sys.stdout.flush()
 
-		time.sleep(1)
+		#time.sleep(1)
 		MyTimer()
 		result = pwn( payload )
 		if len(result) == 0:
