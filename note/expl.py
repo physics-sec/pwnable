@@ -10,8 +10,9 @@ program=./note
 aslr=no
 listen=9019
 """
-host = 'pwnable.kr'
+
 host = '0'
+host = 'pwnable.kr'
 
 #s = ssh(host='pwnable.kr', user='note', password='guest', port=2222)
 #conn = s.process('./note', aslr=False)
