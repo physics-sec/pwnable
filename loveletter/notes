@@ -4,14 +4,26 @@ pwn it and get a shell and read the flag.
 Partial RELRO   Canary found      NX enabled    No PIE
 
 
-#&;`
-'"|*
-?~<>
-^()[
-]{}$
-\,
-
-#&;`'"|*?~<>^()[]{}$\\,
-
+*#&;`'"|*?~<>^()[]{}$\\,
 
 2326 3b60 2722 7c2a 3f7e 3c3e 5e28 295b 5d7b 7d24 5c2c
+
+0xa599e2 es el corazon
+
+echo 'A;BBB' | ./loveletter  2>&1 | grep -a "I love" | xxd
+
+el problema es que no asigna un null byte al final del string despues de extenderlo
+el corazon ocupa 3 bytes, es decir que por cada caracter que esté en la black list,
+se extendera 2 caracteres (el que ya estaba mas dos mas)
+
+quiza si dejo un string del tipo ';cat flag' preparado en el stack, pueda alcanzarlo poniendo muchos
+caracteres black listeados
+
+256 caracteres rompe el stack...
+quiza sea pwn??
+
+tiene stack cookie, asi que no creo..
+
+
+
+permitidos : ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ
