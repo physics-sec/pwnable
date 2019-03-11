@@ -1,0 +1,5 @@
+#!/usr/bin/rarun2
+program=./note
+aslr=no
+listen=9019
+

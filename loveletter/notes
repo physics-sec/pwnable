@@ -1,0 +1,17 @@
+connect to port 9034 (nc 0 9034). the 'loveletter' binary will be executed under loveletter_pwn privilege.
+pwn it and get a shell and read the flag.
+
+Partial RELRO   Canary found      NX enabled    No PIE
+
+
+#&;`
+'"|*
+?~<>
+^()[
+]{}$
+\,
+
+#&;`'"|*?~<>^()[]{}$\\,
+
+
+2326 3b60 2722 7c2a 3f7e 3c3e 5e28 295b 5d7b 7d24 5c2c

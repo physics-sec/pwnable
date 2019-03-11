@@ -1,0 +1,218 @@
+the "note" binary will be executed under note_pwn privilege if you connect to port 9019.
+execute the binary by connecting to daemon(nc 0 9019) then pwn it, then get flag.
+* ASLR is disabled for this challenge
+
+
+
+Partial RELRO   No canary found   NX enabled    No PIE
+
+
+
+1 byte overflow en case secreto
+
+overflow en todas las notas
+
+podes leer y escribir la nota 256, la cual no se inicializa
+
+mem_arr[257] -> no 256
+
+plan
+1) crear notas de la 0 a la 255
+2) intentar leer o escribir la 256 
+
+
+
+https://stackoverflow.com/questions/28575893/when-would-one-use-mmap-map-fixed
+Further, note that use of MAP_FIXED with a hard-coded address or a random address is always a bug. The only correct way to use MAP_FIXED is to replace an existing mapping whose address was assigned by a previous successful call to mmap without MAP_FIXED, or in some other way where you feel it's safe to replace whole pages. This aspect too is completely analogous to dup2; it's always a bug to use dup2 when the caller doesn't already have an open file on the target fd with the intent to replace it.
+
+
+
+       MAP_FIXED
+              Don't  interpret  addr  as  a hint: place the mapping at exactly
+              that address.  addr must be suitably aligned: for most architec‐
+              tures  a  multiple of the page size is sufficient; however, some
+              architectures may impose additional restrictions.  If the memory
+              region  specified by addr and len overlaps pages of any existing
+              mapping(s), then the overlapped part of the existing  mapping(s)
+              will  be  discarded.   If  the specified address cannot be used,
+              mmap() will fail.
+
+              Software that aspires to be portable should  use  the  MAP_FIXED
+              flag  with  care,  keeping  in  mind  that the exact layout of a
+              process's memory mappings is allowed to change significantly be‐
+              tween  kernel versions, C library versions, and operating system
+              releases.  Carefully read the discussion of this flag in NOTES!
+RETURN VALUE
+       On success, mmap() returns a pointer to the mapped area.  On error, the
+       value  MAP_FAILED  (that is, (void *) -1) is returned, and errno is set
+       to indicate the cause of the error.
+
+       On success, munmap() returns 0.  On failure, it returns -1,  and  errno
+       is set to indicate the cause of the error (probably to EINVAL).
+
+
+
+Las notas tienen los permisos: PROT_READ|PROT_WRITE|PROT_EXEC
+si redirijo la ejecucion de código a una página -> win()
+
+yo se la direccion de memoria de todas las notas,
+y puedo sobreescribir un byte del Case hacker
+
+
+
+
+command: ebp-0x40c
+0x40c = 1036
+no alcanza, buffer: 1025
+
+ebp-0xc
+0xc = 12
+
+command pisa hasta ebp-0xb (-11)
+
+es decir, pisa un byte de la variable, cual variable? -> es el indice del menu elegido...
+
+
+
+
+idea general -> redireccionar la ejecucion de código a cualquiera de las notas, habiendo hubicado shellcode ahi.
+como redirecciono la ejecucion de codigo?
+
+
+
+obj.mem_arr[257]  ->  0x0804b0a0
+
+addr = (void*)( ((int)addr & 0xFFFFF000) | 0x80000000 );
+por como se contruye mi addr, no puedo nunca pisar el programa o el heap
+
+
+gdb en pwnable.kr:
+
+	Start Addr   End Addr       Size     Offset objfile
+	 0x8048000  0x804a000     0x2000        0x0 /home/note/note
+	 0x804a000  0x804b000     0x1000     0x1000 /home/note/note
+	 0x804b000  0x804c000     0x1000     0x2000 /home/note/note
+	 0x804c000  0x806d000    0x21000        0x0 [heap]
+
+	0xf7e11000 0xf7e12000     0x1000        0x0 
+	0xf7e12000 0xf7fc2000   0x1b0000        0x0 /lib/i386-linux-gnu/libc-2.23.so
+	0xf7fc2000 0xf7fc4000     0x2000   0x1af000 /lib/i386-linux-gnu/libc-2.23.so
+	0xf7fc4000 0xf7fc5000     0x1000   0x1b1000 /lib/i386-linux-gnu/libc-2.23.so
+	0xf7fc5000 0xf7fc8000     0x3000        0x0 
+
+	0xf7fd4000 0xf7fd5000     0x1000        0x0 
+	0xf7fd5000 0xf7fd7000     0x2000        0x0 [vvar]
+	0xf7fd7000 0xf7fd9000     0x2000        0x0 [vdso]
+	0xf7fd9000 0xf7ffc000    0x23000        0x0 /lib/i386-linux-gnu/ld-2.23.so
+	0xf7ffc000 0xf7ffd000     0x1000    0x22000 /lib/i386-linux-gnu/ld-2.23.so
+	0xf7ffd000 0xf7ffe000     0x1000    0x23000 /lib/i386-linux-gnu/ld-2.23.so
+
+	0xfffdd000 0xffffe000    0x21000        0x0 [stack]
+
+
+1) crear muchas notas hasta que una este entre 0xf7ffe000 y 0xfffdd000 -> arriba del stack
+2) explotar el buffer overflow de la nota y sobre escribir un return pointer
+3) redireccionar codigo a una nota con shellcode
+4) leer flag =D
+
+
+
+----------------------------------------
+
+
+0x08048000 - 0x0804a000 - usr     8K s r-x /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note
+0x0804a000 - 0x0804b000 - usr     4K s r-- /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note
+0x0804b000 - 0x0804c000 - usr     4K s rw- /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note
+0x0804c000 - 0x0806e000 - usr   136K s rw- [heap] [heap]
+
+0xf7dc2000 - 0xf7ddb000 - usr   100K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7ddb000 - 0xf7f29000 - usr   1.3M s r-x /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f29000 - 0xf7f99000 - usr   448K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f99000 - 0xf7f9a000 - usr     4K s --- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f9a000 - 0xf7f9c000 - usr     8K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f9c000 - 0xf7f9d000 - usr     4K s rw- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f9d000 - 0xf7fa0000 - usr    12K s rw- unk0 unk0
+
+0xf7fcd000 - 0xf7fcf000 - usr     8K s rw- unk1 unk1
+0xf7fcf000 - 0xf7fd2000 - usr    12K s r-- [vvar] [vvar]
+0xf7fd2000 - 0xf7fd4000 * usr     8K s r-x [vdso] [vdso]
+0xf7fd4000 - 0xf7fd5000 - usr     4K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+0xf7fd5000 - 0xf7ff1000 - usr   112K s r-x /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+0xf7ff1000 - 0xf7ffb000 - usr    40K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+
+0xf7ffc000 - 0xf7ffd000 - usr     4K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+0xf7ffd000 - 0xf7ffe000 - usr     4K s rw- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+
+0xfffdd000 - 0xffffe000 - usr   132K s rw- [stack] [stack]
+
+
+
+pxw 4 @ ebp +4
+
+
+96 - 0xfffe435c
+4  - 0xffffc49c
+38 - 0xffff363c
+6  - 0xffffbc3c
+
+
+1072 bytes por llamada
+
+base : 0xffffd55c
+
+hay 134.082.560 bytes alocables encima del stack,
+osea 32735 paginas
+necesito una directamente encima del stack, sino, escribo en memoria que no esta alocada y me da un seg fault
+
+existen 1.015.137 posibles direcciones en la cual alocar D=
+la posibilidad de que me de la que quiero es de 0.0001%
+
+
+
+0x08048000 - 0x0804a000 - usr     8K s r-x /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note ; map.home_user_repositorios_pwnable_note_note.r_x
+0x0804a000 - 0x0804b000 - usr     4K s r-- /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note ; map.home_user_repositorios_pwnable_note_note.rw
+0x0804b000 - 0x0804c000 - usr     4K s rw- /home/user/repositorios/pwnable/note/note /home/user/repositorios/pwnable/note/note ; reloc.read
+0x0804c000 - 0x0806e000 - usr   136K s rw- [heap] [heap]
+0xf7dc2000 - 0xf7ddb000 - usr   100K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7ddc000 - 0xf7f29000 - usr   1.3M s r-x /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f29000 - 0xf7f99000 - usr   448K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f99000 - 0xf7f9a000 - usr     4K s --- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f9a000 - 0xf7f9b000 - usr     4K s rwx unk0 unk0
+0xf7f9b000 - 0xf7f9c000 - usr     4K s r-- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so
+0xf7f9c000 - 0xf7f9d000 - usr     4K s rw- /lib/i386-linux-gnu/libc-2.28.so /lib/i386-linux-gnu/libc-2.28.so ; edi
+0xf7f9d000 - 0xf7fa0000 - usr    12K s rw- unk1 unk1
+0xf7fcd000 - 0xf7fcf000 - usr     8K s rw- unk2 unk2
+0xf7fcf000 - 0xf7fd2000 - usr    12K s r-- [vvar] [vvar] ; map.vvar_.r
+0xf7fd2000 - 0xf7fd4000 - usr     8K s r-x [vdso] [vdso] ; map.vdso_.r_x
+0xf7fd4000 - 0xf7fd5000 - usr     4K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+0xf7fd5000 - 0xf7ff1000 - usr   112K s r-x /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so ; map.lib_i386_linux_gnu_ld_2.28.so.r_x
+0xf7ff1000 - 0xf7ffb000 - usr    40K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so ; map.lib_i386_linux_gnu_ld_2.28.so.r
+0xf7ffc000 - 0xf7ffd000 - usr     4K s r-- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so ; map.lib_i386_linux_gnu_ld_2.28.so.rw
+0xf7ffd000 - 0xf7ffe000 - usr     4K s rw- /lib/i386-linux-gnu/ld-2.28.so /lib/i386-linux-gnu/ld-2.28.so
+0xf8d1f000 - 0xf8d20000 - usr     4K s rwx unk3 unk3
+0xf8d82000 - 0xf8d83000 - usr     4K s rwx unk4 unk4
+0xf8fa5000 - 0xf8fa6000 - usr     4K s rwx unk5 unk5
+0xf988c000 - 0xf988d000 - usr     4K s rwx unk6 unk6
+0xfa6c6000 - 0xfa6c7000 - usr     4K s rwx unk7 unk7
+0xfa942000 - 0xfa943000 - usr     4K s rwx unk8 unk8
+0xfadb0000 - 0xfadb1000 - usr     4K s rwx unk9 unk9
+0xfb6c9000 - 0xfb6ca000 - usr     4K s rwx unk10 unk10
+0xfb8e0000 - 0xfb8e1000 - usr     4K s rwx unk11 unk11
+0xfc5a3000 - 0xfc5a4000 - usr     4K s rwx unk12 unk12
+0xfd9ec000 - 0xfd9ed000 - usr     4K s rwx unk13 unk13
+0xfdd0d000 - 0xfdd0e000 - usr     4K s rwx unk14 unk14
+0xfdde8000 - 0xfdde9000 - usr     4K s rwx unk15 unk15
+0xfe7ea000 - 0xfe7eb000 - usr     4K s rwx unk16 unk16
+0xfeb45000 - 0xfeb46000 - usr     4K s rwx unk17 unk17
+0xff4a4000 - 0xff4a5000 - usr     4K s rwx unk18 unk18
+0xff5be000 - 0xff5bf000 - usr     4K s rwx unk19 unk19
+0xffac1000 - 0xffac2000 - usr     4K s rwx unk20 unk20
+0xffbb6000 - 0xffbb7000 - usr     4K s rwx unk21 unk21
+0xfff98000 - 0xffffe000 - usr   408K s rw- [stack] [stack]
+
+
+el stack crece despues de muchas iteraciones del manu, el cual es una funcion recursiva
+si yo pudiera usar ulimit para que el stack crezca indefinidamente, podria hacer que suba
+pero no puedo porque me conecto a un puerto en pwnable
+
+
