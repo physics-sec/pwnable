@@ -1,0 +1,18 @@
+Pwn this echo service.
+
+download : http://pwnable.kr/bin/echo2
+
+Running at : nc pwnable.kr 9011
+
+
+Partial RELRO   No canary found   NX disabled   No PIE
+
+ninguna mitigacion??
+
+
+tu nombre tiene un BOF (parece)
+2. : FSB  tiene un FSB (dah)
+
+AAAAAAAAA %p %p %p  %p %p %p
+AAAAAAAA %6$x
+
