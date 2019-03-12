@@ -1,1 +1,40 @@
 ulimit -f 11 rompe la shell, 12 no cambia nada
+
+win() -> 0x00400a94
+>>> b = "\034\356\200\226k\3715\276\004\2153\250?\33448"
+>>> b = bytes(b)
+>>> b = b[:8]
+>>> b = b[::-1]
+>>> b.encode('hex')
+
+
+>>> b = "\034\356\200\226k\3715\276\004\2153\250?\33448"
+>>> b = bytes(b)
+>>> a = b[:8]
+>>> b = b[8:]
+>>> a = a[::-1]
+>>> b = b[::-1]
+>>> a.encode('hex')
+'be35f96b9680ee1c'
+>>> b.encode('hex')
+'3834dc3fa8338d04'
+
+>>> def skere(str):
+...     b = bytes(str)
+...     a = b[:8]
+...     b = b[8:]
+...     a = a[::-1]
+...     b = b[::-1]
+...     print '0x' + a.encode('hex')
+...     print '0x' + b.encode('hex')
+... 
+
+
+0x835dd4b0e234a719
+0x78f0ef37a2291e99
+0xc94f7162f8f32368
+0xfa3fd841d76f54f5
+0xb9f5b7b5ab85c940
+0x92456e9ce008161c
+aca la posta es hacer que el fread no retorne nada y como pass poner 0
+ulimit quiza funque pero ni idea como
