@@ -20,3 +20,8 @@ AAAAAAAA 0x4141414141414141
 
 
 si como opcion ingresas una 'A', terminas en un seg fault, no se si sera util
+
+idea: piso la direc de free o printf son system
+o mejor.. sacar probecho de que no hay NX!
+dejar shellcode en algun lado y redirigir el codigo con el FSB,
+donde dejar el shellcode?
