@@ -10,9 +10,13 @@ Partial RELRO   No canary found   NX disabled   No PIE
 ninguna mitigacion??
 
 
-tu nombre tiene un BOF (parece)
 2. : FSB  tiene un FSB (dah)
 
 AAAAAAAAA %p %p %p  %p %p %p
 AAAAAAAA %6$x
+AAAAAAAA %6$p
+AAAAAAAA 0x4141414141414141
 
+
+
+si como opcion ingresas una 'A', terminas en un seg fault, no se si sera util
