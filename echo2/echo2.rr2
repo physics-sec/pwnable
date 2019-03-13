@@ -1,0 +1,3 @@
+#!/usr/bin/rarun2
+program=./echo2
+listen=9011

