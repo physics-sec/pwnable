@@ -25,3 +25,7 @@ idea: piso la direc de free o printf son system
 o mejor.. sacar probecho de que no hay NX!
 dejar shellcode en algun lado y redirigir el codigo con el FSB,
 donde dejar el shellcode?
+
+con el FSB podes lekear cualquier puntero, asique medio que todo es conocido..
+podes dejar el shellcode en cualquier lado
+y podes sobre escribir el ret addr del item 2 del menu.
