@@ -1,0 +1,5 @@
+#!/usr/bin/rarun2
+program=./bf
+#preload=./bf_libc.so
+#libpath=.
+listen=9001

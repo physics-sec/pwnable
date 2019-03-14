@@ -1,0 +1,38 @@
+I made a simple brain-fuck language emulation program written in C. 
+The [ ] commands are not implemented yet. However the rest functionality seems working fine. 
+Find a bug and exploit it to get a shell. 
+
+Download : http://pwnable.kr/bin/bf
+Download : http://pwnable.kr/bin/bf_libc.so
+
+Running at : nc pwnable.kr 9001
+
+Partial RELRO   Canary found      NX enabled    No PIE
+
+
+
+
+input: 1024 bytes
+
+obj.p: 0x804a080
+
+
++: suma 1(byte) a donde apunta p
+,: asigna un getchar() a una var extraña
+-: resta 1(byte) a donde apunta p 
+.: putchar(*p)
+<: resto 1 a p
+>: sumo 1 a p
+[: not supported
+
+
+200 + -> 0x2c = 44
+300 - 256 = 44
+tengo que escribir byte por byte
+
+que direccion escribir, y que escribir?
+
+:> pxw 4 @ obj.p
+0x0804a080  0x0804a0a0
+
+
