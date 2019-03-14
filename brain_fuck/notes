@@ -35,4 +35,4 @@ que direccion escribir, y que escribir?
 :> pxw 4 @ obj.p
 0x0804a080  0x0804a0a0
 
-
+la idea seria redireccionar codigo a un one-gadget en el proporcionada libc
