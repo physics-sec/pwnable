@@ -1,0 +1,95 @@
+
+sin mitigaciones
+
+24 bytes de nombre.
+
+use after free -> como tomar ventaja?
+
+double free?
+
+    BOF:
+128 bytes de input
+32 bytes de buffer
+
+-32 bytes-
+-   rbp  -
+-ret addr-
++ 80 bytes
+
+
+obj.func -> 0x00602080 -> [echo1, echo2, ?, ?]
+obj.o    -> 0x00602098 -> heap -> bof
+obj.o + 0x20 -> nombre
+
+echo1 normal:
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E 0123456789ABCDE
+0x01eb9260  5341 4e54 4900 0000 b006 4000 0000 00 SANTI.....@....
+0x01eb926f  0030 893e 3bfe 7f00 00c0 0740 0000 00 .0.>;......@...
+0x01eb927e  0000 ec07 4000 0000 0000 1104 0000 00 ....@..........
+0x01eb928d  0000 0041 4242 4242 4242 4242 4242 42 ...ABBBBBBBBBBB
+0x01eb929c  4242 4242 4242 4242 4242 4242 4242 42 BBBBBBBBBBBBBBB
+0x01eb92ab  4242 4242 430a 0000 0000 0000 0000 00 BBBBC..........
+
+echo1 dsp de free (0x01eb9260)
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E 0123456789ABCDE
+0x01eb9260  0000 0000 0000 0000 1090 eb01 0000 00 ...............
+0x01eb926f  0030 893e 3bfe 7f00 00c0 0740 0000 00 .0.>;......@...
+0x01eb927e  0000 ec07 4000 0000 0000 1104 0000 00 ....@..........
+0x01eb928d  0000 0034 0a42 4242 4242 4242 4242 42 ...4.BBBBBBBBBB
+0x01eb929c  4242 4242 4242 4242 4242 4242 4242 42 BBBBBBBBBBBBBBB
+0x01eb92ab  4242 4242 430a 0000 0000 0000 0000 00 BBBBC..........
+
+echo1 dsp de free y uaf
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E 0123456789ABCDE
+0x01eb9260  0000 0000 0000 0000 1090 eb01 0000 00 ...............
+0x01eb926f  0030 893e 3bfe 7f00 00c0 0740 0000 00 .0.>;......@...
+0x01eb927e  0000 ec07 4000 0000 0000 1104 0000 00 ....@..........
+0x01eb928d  0000 0041 4242 4242 4242 4242 4242 42 ...ABBBBBBBBBBB
+0x01eb929c  4242 4242 4242 4242 4242 4242 4242 42 BBBBBBBBBBBBBBB
+0x01eb92ab  4242 4242 430a 0000 0000 0000 0000 00 BBBBC..........
+
+otro echo1, escribo Ds
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E 0123456789ABCDE
+0x01eb9260  0000 0000 0000 0000 1090 eb01 0000 00 ...............
+0x01eb926f  0030 893e 3bfe 7f00 00c0 0740 0000 00 .0.>;......@...
+0x01eb927e  0000 ec07 4000 0000 0000 1104 0000 00 ....@..........
+0x01eb928d  0000 0044 4444 4444 4444 4444 4444 44 ...DDDDDDDDDDDD
+0x01eb929c  4444 4444 4444 4444 4444 4444 4444 44 DDDDDDDDDDDDDDD
+0x01eb92ab  4444 4444 440a 0000 0000 0000 0000 00 DDDDD..........
+
+
+obj.o -> 0x01473260
+
+
+:> pxq @ 0x0000000001473260
+0x01473260  0x0000000000000000  0x0000000001473010   .........0G.....
+0x01473270  0x4342424242424242  0x00000000004007c0   BBBBBBBC..@.....
+0x01473280  0x00000000004007ec  0x0000000000000411   ..@.............
+0x01473290  0x6161616161616141  0x6161616161616161   Aaaaaaaaaaaaaaaa
+0x014732a0  0x6161616161616161  0x6161616161616161   aaaaaaaaaaaaaaaa
+0x014732b0  0x0000000a41416161  0x0000000000000000   aaAA............
+0000
+
+el segundo registro es sym.goodbye()
+que carajos?
+
+
+el BOF se escribe tanto en el heap como en el stack
+ambos son ejecutables, y no se donde esta ninguno de los dos...
+
+
+ROP gadgets..
+0x0000000000400761 : pop rbx ; pop rbp ; ret
+0x0000000000400adc : nop dword ptr [rax] ; mov rdx, r15 ; mov rsi, r14 ; mov edi, r13d ; call qword ptr [r12 + rbx*8]
+0x0000000000400af8 : pop rsp ; and al, 8 ; mov rbp, qword ptr [rsp + 0x10] ; mov r12, qword ptr [rsp + 0x18] ; mov r13, qword ptr [rsp + 0x20] ; mov r14, qword ptr [rsp + 0x28] ; mov r15, qword ptr [rsp + 0x30] ; add rsp, 0x38 ; ret
+0x0000000000400b0b : mov esi, dword ptr [rsp + 0x28] ; mov r15, qword ptr [rsp + 0x30] ; add rsp, 0x38 ; ret
+add rsp, 0x38 ; ret
+mov r12, qword ptr [rsp + 0x18] ; mov r13, qword ptr [rsp + 0x20] ; mov r14, qword ptr [rsp + 0x28] ; mov r15, qword ptr [rsp + 0x30] ; add rsp, 0x38 ; ret
+
+"controlo"
+r12, r13, r14, r15, rbx, rbp
+
+call qword ptr [r12 + rbx*8]
+
+
+
