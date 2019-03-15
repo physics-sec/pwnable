@@ -36,3 +36,15 @@ que direccion escribir, y que escribir?
 0x0804a080  0x0804a0a0
 
 la idea seria redireccionar codigo a un one-gadget en el proporcionada libc
+
+ok.. no encuentro manera de hacer que el programa vuelva a emepzar...
+
+escribir el addr de libc en system?
+adivinar el addr?
+
+system("cat flag > /tmp/pwned; chmod +r /tmp/pwned")
+
+
+si escribo la got de puts puedo redirigir codigo..
+me sirve?
+el stack frame se va a ir a la mierda...
