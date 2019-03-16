@@ -1,9 +1,17 @@
 
 cuando llame a  execv el stack tiene que verse asi
-<bin_sh_addr>   <-- esp pointer
+<ret addr>    <-- esp pointer
+<bin_sh_addr>
 0x00000000
 
 eax tiene un punero a mi input, quiza un rop gadget me deje ubicarlo ahi
 el problema es encontrar un rop gadget que llame a execv estando asi le stack
 
 no encontre ningun punero en el stack que pueda re utilizar..
+
+
+el rop gadget tiene que decrementar esp, dsp pushear eax y un null bye...
+muy dificil
+
+
+0x08048740 -> ./libc-2.15.so

