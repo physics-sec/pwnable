@@ -216,3 +216,29 @@ si yo pudiera usar ulimit para que el stack crezca indefinidamente, podria hacer
 pero no puedo porque me conecto a un puerto en pwnable
 
 
+en total entran 1.014.253 paginas
+son demaciadas..
+hay que tener en cuenta dos cosas...
+
+1) el stack crece por cada iteracion del menu
+2) si una pagina no puede ser alocada, busca a la siguiente inmediata
+
+estos dos hechos, podran servirme?
+
+ubicar una pagina cerca del stack por azar, y despues hacer que el stack crezca?
+
+352K
+605 - 692K
+837 - 892K
+1227 - 1.3M
+0xffd4b000 - 0xffd4c000 - usr     4K s rwx unk43 unk43
+0xffeb5000 - 0xffffe000 - usr   1.3M s rw- [stack] [stack]
+
+1926 - 672K
+0xffdf5000 - 0xfff55000 - usr   1.4M s rw- unk66 unk66
+0xfff55000 - 0xfff56000 - usr     4K s rwx unk67 unk67
+0xfff56000 - 0xffffe000 - usr   672K s rw- [stack] [stack]
+
+lo logre!!!
+entonces: tengo que saber calcular el tamaño del stack en base a cuantas iteraciones realize
+cuando encuentro que coinciden, game over.
