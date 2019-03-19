@@ -1,0 +1,41 @@
+0x3ac5c execve("/bin/sh", esp+0x28, environ)
+constraints:
+  esi is the GOT address of libc
+  [esp+0x28] == NULL
+
+0x3ac5e execve("/bin/sh", esp+0x2c, environ)
+constraints:
+  esi is the GOT address of libc
+  [esp+0x2c] == NULL
+
+0x3ac62 execve("/bin/sh", esp+0x30, environ)
+constraints:
+  esi is the GOT address of libc
+  [esp+0x30] == NULL
+
+0x3ac69 execve("/bin/sh", esp+0x34, environ)
+constraints:
+  esi is the GOT address of libc
+  [esp+0x34] == NULL
+
+0x3ac8c execve("/bin/sh", eax, [esp])
+constraints:
+  esi is the GOT address of libc
+  [eax] == NULL || eax == NULL
+  [[esp]] == NULL || [esp] == NULL
+
+0x3ac8d execve("/bin/sh", [esp], [esp+0x4])
+constraints:
+  esi is the GOT address of libc
+  [[esp]] == NULL || [esp] == NULL
+  [[esp+0x4]] == NULL || [esp+0x4] == NULL
+
+0x5fbc5 execl("/bin/sh", eax)
+constraints:
+  esi is the GOT address of libc
+  eax == NULL
+
+0x5fbc6 execl("/bin/sh", [esp])
+constraints:
+  esi is the GOT address of libc
+  [esp] == NULL

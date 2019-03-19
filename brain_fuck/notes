@@ -48,3 +48,5 @@ system("cat flag > /tmp/pwned; chmod +r /tmp/pwned")
 si escribo la got de puts puedo redirigir codigo..
 me sirve?
 el stack frame se va a ir a la mierda...
+SI!
+

