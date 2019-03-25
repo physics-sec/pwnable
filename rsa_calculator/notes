@@ -19,3 +19,7 @@ hay que encontrar una func que tenga mi input como parametro
 
 mas facil.. saltar a shellcode!
 que tan dificil sera obtener el addr de mi input?
+
+el programa solo realiza 10 operaciones.
+1 es setear key
+9 restantes
