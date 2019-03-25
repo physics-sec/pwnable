@@ -1,0 +1,3 @@
+#!/usr/bin/rarun2
+program=./rsa_calculator
+listen=9012
