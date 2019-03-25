@@ -4,3 +4,18 @@ nc pwnable.kr 9012
 7, 13
 65537 
 
+Partial RELRO   Canary found      NX disabled   No PIE
+
+en 0x00602538 esta el addr de system
+seria la opcion 8 del menu, indice 7
+
+
+es un format string vuln en decrypt
+
+plan:
+sobreescribir un addr en la got con system?
+hay que encontrar una func que tenga mi input como parametro
+
+
+mas facil.. saltar a shellcode!
+que tan dificil sera obtener el addr de mi input?
