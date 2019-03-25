@@ -73,13 +73,38 @@ def setkey():
     sendline('3593')
     recvuntil('> ')
 
+def encrypt(pt):
+    sendline('2')
+    recvuntil(' : ')
+    sendline(str(len(pt)))
+    recvuntil('data\n')
+    sendline(pt)
+    recvuntil('(hex encoded) -\n')
+    ct = recvline()
+    recvuntil('> ')
+    return ct
+
+def decrypt(ct):
+    sendline('3')
+    recvuntil(' : ')
+    sendline(str(len(ct)))
+    recvuntil('data\n')
+    sendline(ct)
+    recvuntil('result -\n')
+    pt = recvline()
+    recvuntil('> ')
+    return pt
+
 def main():
     recvuntil('> ')
     setkey()
+    payload = '%p %p %p %p'
+    ct = encrypt(payload)
+    print decrypt(ct)
+
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
         pass
-
