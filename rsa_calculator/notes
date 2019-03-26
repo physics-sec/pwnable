@@ -23,3 +23,14 @@ que tan dificil sera obtener el addr de mi input?
 el programa solo realiza 10 operaciones.
 1 es setear key
 9 restantes
+
+
+pasos:
+1) leakeo un address del stack
+2) ingreso shellcode
+3) obtengo el offset a mi input
+4) sobreescribo el ret addr o la got a mi input
+
+
+mi input desencriptado = 0x00602560
+el ret addr = 0x40140a
