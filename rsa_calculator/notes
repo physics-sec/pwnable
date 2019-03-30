@@ -50,3 +50,7 @@ PROBLEMA:
 si mi input es muy grande, entonces no esta en el stack,
 bypass?
 el ciphertext si esta, quiza hacer algo raro y psar por ahi las address de ret
+
+el decrypt no desencripta mi shellcode correctamente por alguna razon...
+
+el leak del stack pointer no funciona en remoto...
