@@ -22,8 +22,8 @@ u32 = lambda data: struct.unpack("I", data)[0]
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.settimeout(60)
-host = '0'
 host = 'pwnable.kr'
+host = '0'
 s.connect((host, 9019))
 
 stack_base = 0xffffe000

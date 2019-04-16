@@ -78,3 +78,34 @@ size : -60 -> -32
 size : -70 -> -48
 size : -90 -> -64
 
+
+
+
+
+
+
+
+
+
+
+
+╭─user@kali ~/repositorios/pwnable/alloca  ‹master*› 
+╰─$ ulimit -s 30
+╭─user@kali ~/repositorios/pwnable/alloca  ‹master› 
+╰─$ ./alloca    
+- BOF(buffer overflow) is very easy to prevent. here is how to.
+
+   1. allocate the buffer size only as you need it
+   2. know your buffer size and limit the input length
+
+- simple right?. let me show you.
+
+- whats the maximum length of your buffer?(byte) : 321564
+- give me your random canary number to prove there is no BOF : 351
+- ok lets allocate a buffer of length 321564
+
+[1]    16645 segmentation fault  ./alloca
+
+
+ulimit: 30
+size  : 23000
