@@ -1,4 +1,6 @@
 
+Partial RELRO   No canary found   NX enabled    No PIE
+
 win() -> 0x004005f4
 
 my_fgets
@@ -24,4 +26,40 @@ ret -> 0x000000004005b4c3 en vez de 0x004005f4
 
 supuestamente deberia funcionar...
 2d310a4141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141f4054000000000000a
+
+
+
+undefined8 main(void)
+
+{
+  undefined buff [44];
+  uint size_to_read;
+  
+  __isoc99_scanf(&DAT_004007ca,&size_to_read,&size_to_read);
+  if (0x20 < (int)size_to_read) {
+    puts("preventing buffer overflow");
+    size_to_read = 0x20;
+  }
+  my_fgets(buff,(ulong)size_to_read,(ulong)size_to_read);
+  return 0;
+}
+
+
+ulong my_fgets(long lParm1,int iParm2)
+
+{
+  bool keep;
+  int bytes_left_to_read;
+  char byte_read;
+  uint bytes_read;
+  
+  bytes_read = 0;
+  bytes_left_to_read = iParm2;
+  while ((keep = bytes_left_to_read != 0, bytes_left_to_read = bytes_left_to_read + -1, keep &&
+         (read(0,&byte_read,1), byte_read != '\n'))) {
+    *(char *)((long)(int)bytes_read + lParm1) = byte_read;
+    bytes_read = bytes_read + 1;
+  }
+  return (ulong)bytes_read;
+}
 

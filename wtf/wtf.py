@@ -37,7 +37,7 @@ if __name__ == '__main__':
 	                            - Sincerely yours, newb
 	'''
 	sys.stdout.flush()
-	time.sleep(1)
+	#time.sleep(1)
 
 	try:
 		sys.stdout.write('payload please : ')
