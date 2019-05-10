@@ -63,3 +63,10 @@ ulong my_fgets(long lParm1,int iParm2)
   return (ulong)bytes_read;
 }
 
+
+
+si me conecto por netcat y le mando mi input a mano todo funcion ok
+si mando mi input por netcat o por un archivo con radare read() lee un byte fijo
+cientos de veces por alguna razon
+si me conecto con mi exploit no lee stdin
+

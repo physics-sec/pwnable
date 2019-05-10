@@ -1,3 +1,4 @@
 #!/usr/bin/rarun2
 program=./wtf
+#stdin=./in.txt
 listen=9015
