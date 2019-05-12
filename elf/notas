@@ -1,6 +1,4 @@
 
-gen.py crea un archivo .c con una funcion yes_ur_flag
-
 en la memoria del proceso elf.py esta la flag
 la idea es darle una direc de memoria y leerla
 como la encuentro con solo 25 lecturas??
@@ -15,4 +13,13 @@ plan -> encontrar un puntero a libflag.so
 
 el python de pwnable no es el mismo que el mio, el mio tiene PIE
 no puedo correr elf.py con su python en mi sistema porque rompe
+
+
+dumpear todo el code segment tomaria 3456 lecturas
+leer todos los nombres de las funcs tomaria 2815 lecturas
+
+la seccion que tiene los nombres de las funciones esta alineada porque los largos son iguales
+puedo hacer una especia de busqueda binaria porque despues del yes_your_flag se desalinea
+
+la alineacion se mantiene siempre y cuando se mantengan la cantidad de digitos
 
