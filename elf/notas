@@ -1,0 +1,18 @@
+
+gen.py crea un archivo .c con una funcion yes_ur_flag
+
+en la memoria del proceso elf.py esta la flag
+la idea es darle una direc de memoria y leerla
+como la encuentro con solo 25 lecturas??
+
+la liberia se re-genera con una probabilidad de 10% cada vez que llamo a elf.py
+puedo darme cuanta cuando eso pasa porque hay un sleep(1)
+
+r2 -d $(pidof python elf.py)
+
+plan -> encontrar un puntero a libflag.so
+
+
+el python de pwnable no es el mismo que el mio, el mio tiene PIE
+no puedo correr elf.py con su python en mi sistema porque rompe
+
