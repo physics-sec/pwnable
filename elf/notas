@@ -23,3 +23,16 @@ puedo hacer una especia de busqueda binaria porque despues del yes_your_flag se 
 
 la alineacion se mantiene siempre y cuando se mantengan la cantidad de digitos
 
+
+not_my_flag -> 19 bytes
+0x000c7a27
+0x000c7a3a
+not_ur_flag -> 19 bytes
+0x000c7b0a
+0x000c7b1d
+
+hay maximo 10000 not_my_flag
+lo mejor es leer 10000 leer mas de eso
+y ver por cuánto me pase
+
+
